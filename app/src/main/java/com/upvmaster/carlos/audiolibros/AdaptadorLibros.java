@@ -17,12 +17,17 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
     private LayoutInflater inflador; //Crea Layouts a partir del XML protected
     List<Libro> listaLibros; //Vector con libros a visualizar
     private Context contexto;
+    private View.OnClickListener onClickListener;
 
     public AdaptadorLibros(Context contexto, List<Libro> listaLibros) {
         inflador = (LayoutInflater) contexto.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.listaLibros = listaLibros;
         this.contexto = contexto;
     } //Creamos nuestro ViewHolder, con los tipos de elementos a modificar
+
+    public void setOnItemClickListener(View.OnClickListener onClickListener) {
+        this.onClickListener = onClickListener;
+    }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public ImageView portada;
@@ -39,6 +44,7 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) { // Inflamos la vista desde el xml
         View v = inflador.inflate(R.layout.elemento_selector, null);
+        v.setOnClickListener(onClickListener);
         return new ViewHolder(v);
     }
 
