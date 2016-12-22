@@ -1,4 +1,6 @@
-package com.upvmaster.carlos.audiolibros;
+package com.upvmaster.carlos.audiolibros.entities;
+
+import com.upvmaster.carlos.audiolibros.R;
 
 import java.util.ArrayList;
 import java.util.List;
