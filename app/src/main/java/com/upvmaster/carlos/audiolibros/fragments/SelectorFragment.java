@@ -49,6 +49,12 @@ public class SelectorFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        ((MainActivity) getActivity()).mostrarElementos(true);
+        super.onResume();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflador, ViewGroup contenedor, Bundle savedInstanceState) {
         View vista = inflador.inflate(R.layout.fragment_selector, contenedor, false);
         setHasOptionsMenu(true);

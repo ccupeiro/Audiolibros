@@ -14,6 +14,7 @@ import android.widget.MediaController;
 import android.widget.TextView;
 
 import com.upvmaster.carlos.audiolibros.R;
+import com.upvmaster.carlos.audiolibros.activities.MainActivity;
 import com.upvmaster.carlos.audiolibros.entities.Aplicacion;
 import com.upvmaster.carlos.audiolibros.entities.Libro;
 
@@ -75,9 +76,18 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
         mediaController.setMediaPlayer(this);
         mediaController.setAnchorView(getView().findViewById(
                 R.id.fragment_detalle));
-        mediaController.setPadding(0, 0, 0,110);
+        mediaController.setPadding(0, 0, 0, 110);
         mediaController.setEnabled(true);
         mediaController.show();
+    }
+
+    @Override
+    public void onResume() {
+        DetalleFragment detalleFragment = (DetalleFragment) getFragmentManager().findFragmentById(R.id.detalle_fragment);
+        if (detalleFragment == null) {
+            ((MainActivity) getActivity()).mostrarElementos(false);
+        }
+        super.onResume();
     }
 
     @Override
