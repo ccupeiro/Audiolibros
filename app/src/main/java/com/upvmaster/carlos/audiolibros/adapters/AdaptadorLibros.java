@@ -48,7 +48,6 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
         public ViewHolder(View itemView) {
             super(itemView);
             portada = (ImageView) itemView.findViewById(R.id.portada);
-            portada.setScaleType(ImageView.ScaleType.CENTER_INSIDE);
             titulo = (TextView) itemView.findViewById(R.id.titulo);
         }
     } // Creamos el ViewHolder con las vista de un elemento sin personalizar

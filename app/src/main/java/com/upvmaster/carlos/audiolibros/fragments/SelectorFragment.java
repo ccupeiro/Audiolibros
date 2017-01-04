@@ -1,12 +1,12 @@
 package com.upvmaster.carlos.audiolibros.fragments;
 
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -16,11 +16,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.upvmaster.carlos.audiolibros.R;
 import com.upvmaster.carlos.audiolibros.activities.MainActivity;
-import com.upvmaster.carlos.audiolibros.adapters.AdaptadorLibros;
 import com.upvmaster.carlos.audiolibros.adapters.AdaptadorLibrosFiltro;
 import com.upvmaster.carlos.audiolibros.entities.Aplicacion;
 import com.upvmaster.carlos.audiolibros.entities.Libro;
@@ -38,14 +36,13 @@ public class SelectorFragment extends Fragment {
     private List<Libro> listaLibros;
 
     @Override
-    public void onAttach(Context contexto) {
-        super.onAttach(contexto);
-        if (contexto instanceof Activity) {
-            this.actividad = (Activity) contexto;
-            Aplicacion app = (Aplicacion) actividad.getApplication();
-            adaptador = app.getAdaptador();
-            listaLibros = app.getListLibros();
-        }
+    public void onAttach(Activity actividad) {
+        super.onAttach(actividad);
+        this.actividad = actividad;
+        Aplicacion app = (Aplicacion) actividad.getApplication();
+        adaptador = app.getAdaptador();
+        listaLibros = app.getListLibros();
+
     }
 
     @Override

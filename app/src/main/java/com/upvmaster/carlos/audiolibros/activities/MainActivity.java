@@ -1,22 +1,18 @@
 package com.upvmaster.carlos.audiolibros.activities;
 
-import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -31,8 +27,6 @@ import com.upvmaster.carlos.audiolibros.entities.Libro;
 import com.upvmaster.carlos.audiolibros.fragments.DetalleFragment;
 import com.upvmaster.carlos.audiolibros.fragments.SelectorFragment;
 
-import static android.R.id.toggle;
-import static com.upvmaster.carlos.audiolibros.R.id.appBarLayout;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -50,9 +44,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         if ((findViewById(R.id.contenedor_pequeno) != null) &&
-                (getSupportFragmentManager().findFragmentById(R.id.contenedor_pequeno) == null)) {
+                (getFragmentManager().findFragmentById(R.id.contenedor_pequeno) == null)) {
             SelectorFragment primerFragment = new SelectorFragment();
-            getSupportFragmentManager().beginTransaction()
+            getFragmentManager().beginTransaction()
                     .add(R.id.contenedor_pequeno, primerFragment).commit();
         }
         appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
@@ -147,7 +141,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         SharedPreferences.Editor editor = pref.edit();
         editor.putInt("ultimo", id);
         editor.commit();
-        DetalleFragment detalleFragment = (DetalleFragment) getSupportFragmentManager().findFragmentById(R.id.detalle_fragment);
+        DetalleFragment detalleFragment = (DetalleFragment) getFragmentManager().findFragmentById(R.id.detalle_fragment);
         if (detalleFragment != null) {
             detalleFragment.ponInfoLibro(id);
         } else {
@@ -155,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             Bundle args = new Bundle();
             args.putInt(DetalleFragment.ARG_ID_LIBRO, id);
             nuevoFragment.setArguments(args);
-            FragmentTransaction transaccion = getSupportFragmentManager()
+            FragmentTransaction transaccion = getFragmentManager()
                     .beginTransaction();
             transaccion.replace(R.id.contenedor_pequeno, nuevoFragment);
             transaccion.addToBackStack(null);
