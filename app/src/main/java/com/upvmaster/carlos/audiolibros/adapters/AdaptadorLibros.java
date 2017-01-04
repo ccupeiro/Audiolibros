@@ -1,6 +1,7 @@
 package com.upvmaster.carlos.audiolibros.adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
+import com.upvmaster.carlos.audiolibros.entities.Aplicacion;
 import com.upvmaster.carlos.audiolibros.entities.Libro;
 import com.upvmaster.carlos.audiolibros.R;
 
@@ -59,9 +63,21 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
 
     // Usando como base el ViewHolder y lo personalizamos
     @Override
-    public void onBindViewHolder(ViewHolder holder, int posicion) {
+    public void onBindViewHolder(final ViewHolder holder, int posicion) {
         Libro libro = listaLibros.get(posicion);
-        holder.portada.setImageResource(libro.recursoImagen);
+        Aplicacion aplicacion = (Aplicacion) contexto.getApplicationContext();
+        aplicacion.getLectorImagenes().get(libro.urlImagen, new ImageLoader.ImageListener() {
+            @Override
+            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                Bitmap bitmap = response.getBitmap();
+                holder.portada.setImageBitmap(bitmap);
+            }
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                holder.portada.setImageResource(R.drawable.books);
+            }
+        });
         holder.titulo.setText(libro.titulo);
     }
 

@@ -37,7 +37,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@android:color/darker_gray" />
 
-        <ImageView
+        <com.android.volley.toolbox.NetworkImageView
             android:id="@+id/portada"
             android:layout_width="220dp"
             android:layout_height="220dp"
