@@ -3,6 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.upvmaster.carlos.audiolibros.activities.MainActivity">
     <item
+        android:id="@+id/menu_buscar"
+        android:icon="@android:drawable/ic_menu_search"
+        android:orderInCategory="90"
+        android:title="Buscar"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="ifRoom|collapseActionView" />
+    <item
         android:id="@+id/menu_preferencias"
         android:icon="@android:drawable/ic_menu_preferences"
         android:orderInCategory="95"

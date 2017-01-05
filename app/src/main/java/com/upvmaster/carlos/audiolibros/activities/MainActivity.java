@@ -1,6 +1,7 @@
 package com.upvmaster.carlos.audiolibros.activities;
 
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,6 +26,7 @@ import com.upvmaster.carlos.audiolibros.adapters.AdaptadorLibrosFiltro;
 import com.upvmaster.carlos.audiolibros.entities.Aplicacion;
 import com.upvmaster.carlos.audiolibros.entities.Libro;
 import com.upvmaster.carlos.audiolibros.fragments.DetalleFragment;
+import com.upvmaster.carlos.audiolibros.fragments.PreferenciasFragment;
 import com.upvmaster.carlos.audiolibros.fragments.SelectorFragment;
 
 
@@ -43,16 +45,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        if ((findViewById(R.id.contenedor_pequeno) != null) &&
-                (getFragmentManager().findFragmentById(R.id.contenedor_pequeno) == null)) {
-            SelectorFragment primerFragment = new SelectorFragment();
-            getFragmentManager().beginTransaction()
-                    .add(R.id.contenedor_pequeno, primerFragment).commit();
-        }
+        int idContenedor = (findViewById(R.id.contenedor_pequeno) != null)
+                ? R.id.contenedor_pequeno : R.id.contenedor_izquierdo;
+        SelectorFragment primerFragment = new SelectorFragment();
+        getFragmentManager().beginTransaction().add(idContenedor, primerFragment).commit();
         appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         adaptador = ((Aplicacion) getApplicationContext()).getAdaptador();
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
         //Pestañas
         tabs = (TabLayout) findViewById(R.id.tabs);
         tabs.addTab(tabs.newTab().setText("Todos"));
@@ -87,6 +91,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             public void onTabReselected(TabLayout.Tab tab) {
             }
         });
+        // Navigation Drawer
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -96,23 +113,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
 
-        // Navigation Drawer
-        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.drawer_open, R.string.drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        }
-        toggle.setToolbarNavigationClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
     }
 
     @Override
@@ -126,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.menu_preferencias) {
-            Toast.makeText(this, "Preferencias", Toast.LENGTH_LONG).show();
+            lanzarPreferencias();
             return true;
         } else if (id == R.id.menu_ultimo) {
             irUltimoVisitado();
@@ -184,10 +184,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         } else if (id == R.id.nav_suspense) {
             adaptador.setGenero(Libro.G_SUSPENSE);
             adaptador.notifyDataSetChanged();
+        } else if (id == R.id.nav_preferencias) {
+            lanzarPreferencias();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void lanzarPreferencias() {
+        int idContenedor = (findViewById(R.id.contenedor_pequeno) != null)
+                ? R.id.contenedor_pequeno : R.id.contenedor_izquierdo;
+        PreferenciasFragment prefFragment = new PreferenciasFragment();
+        getFragmentManager().beginTransaction()
+                .replace(idContenedor, prefFragment).addToBackStack(null).commit();
     }
 
     @Override

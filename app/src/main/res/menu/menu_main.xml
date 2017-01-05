@@ -8,11 +8,4 @@
         android:orderInCategory="100"
         android:title="Último leido"
         app:showAsAction="ifRoom|withText" />
-    <item
-        android:id="@+id/menu_buscar"
-        android:icon="@android:drawable/ic_menu_search"
-        android:orderInCategory="90"
-        android:title="Buscar"
-        app:actionViewClass="android.support.v7.widget.SearchView"
-        app:showAsAction="ifRoom|collapseActionView" />
 </menu>

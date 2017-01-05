@@ -74,7 +74,7 @@ public class AdaptadorLibrosFiltro extends AdaptadorLibros {
     }
 
     public void insertar(Libro libro) {
-        listaSinFiltros.add(libro);
+        listaSinFiltros.add(0,libro);
         recalculaFiltro();
     }
 }
