@@ -12,5 +12,13 @@
         <attr name="colorRegla" format="color" />
         <attr name="colorPalanca" format="color" />
         <attr name="colorGuia" format="color" />
+        <attr name="val" format="integer" />
+        <attr name="valMin" format="integer" />
+        <attr name="valMax" format="integer" />
+        <attr name="escalaMin" format="integer" />
+        <attr name="escalaMax" format="integer" />
+        <attr name="escalaIni" format="integer" />
+        <attr name="escalaRaya" format="integer" />
+        <attr name="escalaRayaLarga" format="integer" />
     </declare-styleable>
 </resources>

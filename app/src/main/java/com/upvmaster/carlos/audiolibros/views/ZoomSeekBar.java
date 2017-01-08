@@ -18,14 +18,14 @@ import com.upvmaster.carlos.audiolibros.R;
 
 public class ZoomSeekBar extends View {
     // Valor a controlar
-    private int val = 160; // valor seleccionado
-    private int valMin = 100; // valor mínimo
-    private int valMax = 200; // valor máximo
-    private int escalaMin = 150; // valor mínimo visualizado
-    private int escalaMax = 180; // valor máximo visualizado
-    private int escalaIni = 100; // origen de la escala
-    private int escalaRaya = 2; // cada cuantas unidades una rayas
-    private int escalaRayaLarga = 5; // cada cuantas rayas una larga
+    private int val; // valor seleccionado
+    private int valMin; // valor mínimo
+    private int valMax; // valor máximo
+    private int escalaMin; // valor mínimo visualizado
+    private int escalaMax; // valor máximo visualizado
+    private int escalaIni; // origen de la escala
+    private int escalaRaya; // cada cuantas unidades una rayas
+    private int escalaRayaLarga; // cada cuantas rayas una larga
     // Dimensiones en pixels
     private int altoNumeros;
     private int altoRegla;
@@ -64,6 +64,15 @@ public class ZoomSeekBar extends View {
             reglaPaint.setColor(a.getColor(R.styleable.ZoomSeekBar_colorRegla, Color.BLACK));
             guiaPaint.setColor(a.getColor(R.styleable.ZoomSeekBar_colorGuia, Color.BLUE));
             palancaPaint.setColor(a.getColor(R.styleable.ZoomSeekBar_colorPalanca, 0xFF00007F));
+            val = a.getInteger(R.styleable.ZoomSeekBar_val,160);
+            valMin = a.getInteger(R.styleable.ZoomSeekBar_valMin,100);
+            valMax = a.getInteger(R.styleable.ZoomSeekBar_valMax,200);
+            escalaMin = a.getInteger(R.styleable.ZoomSeekBar_escalaMin,150);
+            escalaMax = a.getInteger(R.styleable.ZoomSeekBar_escalaMax,180);
+            escalaIni = a.getInteger(R.styleable.ZoomSeekBar_escalaIni,100);
+            escalaRaya = a.getInteger(R.styleable.ZoomSeekBar_escalaRaya,2);
+            escalaRayaLarga = a.getInteger(R.styleable.ZoomSeekBar_escalaRayaLarga,5);
+
         } finally {
             a.recycle();
         }
@@ -75,7 +84,7 @@ public class ZoomSeekBar extends View {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         xIni = getPaddingLeft();
-        yIni = getPaddingTop();
+        yIni = (getHeight()/2) - ((altoBar + altoRegla+altoNumeros)/2) - getPaddingTop();
         ancho = getWidth() - getPaddingRight() - getPaddingLeft();
         barRect.set(xIni, yIni, xIni + ancho, yIni + altoBar);
         escalaRect.set(xIni, yIni + altoBar, xIni + ancho, yIni + altoBar + altoNumeros + altoRegla);
@@ -228,7 +237,9 @@ public class ZoomSeekBar extends View {
     }
 
     public void setValMin(int valMin) {
-        this.valMin = valMin;
+        if(valMin<=this.valMax){
+            this.valMin = valMin;
+        }
     }
 
     public int getValMax() {
@@ -236,7 +247,9 @@ public class ZoomSeekBar extends View {
     }
 
     public void setValMax(int valMax) {
-        this.valMax = valMax;
+        if(valMax>=this.valMin){
+            this.valMax = valMax;
+        }
     }
 
     public int getEscalaMin() {
@@ -244,7 +257,10 @@ public class ZoomSeekBar extends View {
     }
 
     public void setEscalaMin(int escalaMin) {
-        this.escalaMin = escalaMin;
+        if(valMin <= escalaMin && escalaMin <= valMax && escalaMin<this.escalaMax){
+            this.escalaMin = escalaMin;
+            invalidate();
+        }
     }
 
     public int getEscalaMax() {
@@ -252,7 +268,10 @@ public class ZoomSeekBar extends View {
     }
 
     public void setEscalaMax(int escalaMax) {
-        this.escalaMax = escalaMax;
+        if(valMin <= escalaMax && escalaMax <= valMax && escalaMax>this.escalaMin){
+            this.escalaMax = escalaMax;
+            invalidate();
+        }
     }
 
     public int getEscalaIni() {
@@ -260,7 +279,10 @@ public class ZoomSeekBar extends View {
     }
 
     public void setEscalaIni(int escalaIni) {
-        this.escalaIni = escalaIni;
+        if(valMin <= escalaIni && escalaIni<=valMax){
+            this.escalaIni = escalaIni;
+            invalidate();
+        }
     }
 
     public int getEscalaRaya() {
@@ -268,7 +290,10 @@ public class ZoomSeekBar extends View {
     }
 
     public void setEscalaRaya(int escalaRaya) {
-        this.escalaRaya = escalaRaya;
+        if(escalaRaya<=escalaRayaLarga){
+            this.escalaRaya = escalaRaya;
+            invalidate();
+        }
     }
 
     public int getEscalaRayaLarga() {
@@ -276,6 +301,11 @@ public class ZoomSeekBar extends View {
     }
 
     public void setEscalaRayaLarga(int escalaRayaLarga) {
-        this.escalaRayaLarga = escalaRayaLarga;
+        if(escalaRayaLarga>=escalaRaya){
+            this.escalaRayaLarga = escalaRayaLarga;
+            invalidate();
+        }
+
+
     }
 }
