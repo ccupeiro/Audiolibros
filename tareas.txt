@@ -1,0 +1,67 @@
+Unidad 1: Interfaz Usuario 
+(X) Ejercicio: Acceso a información global con la clase Application 
+(X) Ejercicio: Definir la paleta de colores de la aplicación 
+(X) Ejercicio: Primera versión de Audiolibros con un RecyclerView 
+(X) Ejercicio: Mostrar una cuadrícula en un RecyclerView 
+(X) Ejercicio: Un primer ejemplo con fragments 
+(X) Ejercicio: Implementando un segundo fragment 
+(X) Ejercicio: Insertar un fragment por código 
+(X) Ejercicio: Comunicación e intercambio de fragments 
+(X) Ejercicio: Añadiendo un menú contextual al RecyclerView 
+(X) Ejercicio: Añadir una barra de acciones con Toolbar 
+(X) Ejercicio: Uso de Snackbar para confirmar borrardo 
+(X) Práctica: Dar funcionalidad al botón flotante 
+(X) Ejercicio: Añadir pestañas con TabLayout 
+(X) Ejercicio: Añadir un Navigation Drawer en Audiolibros 
+(X) Ejercicio: Incorporando búsquedas dinámicamente 
+(X) Ejercicio: Añadiendo preferencias mediante PreferenceFragment 
+Extras: 
+(X) Ejercicio: Añadir un menú desde un fragment 
+(X) Ejercicio: Barra de acciones ocultable 
+(X) Ejercicio: Barra de acciones extendida 
+(X) Ejercicio: Anclar el botón flotante a la barra de acciones 
+(X) Ejercicio: Ocultar / mostrar elementos al cambiar de fragment 
+(X) Práctica: Añadir dinámicamente PreferenciasFragment
+(X) Desafio: Mostrar Navigation Drawable solo con SelectorFragment (NOTA: los desafíos y prácticas subrayadas se detallan más adelante) 
+
+Unidad 1: Animaciones 
+(X) Ejercicio: Animación de vistas borrado en Audiolibros 
+(-) Ejercicio: Animación de propiedades borrado en Audiolibros (Se elige la anterior)
+Extras: 
+(X) Práctica: Animación de propiedades compartir en Audiolibros 
+(X) Ejercicio: Visualizar animación insertar en un RecyclerView 
+(X) Ejercicio: Extraer paleta de colores de una imagen 
+(_) Práctica: Extraer paleta de colores de forma eficiente 
+(X) Ejercicio: Crear un gráfico vectorial 
+(X) Ejercicio: Un editor SVG para crear gráficos vectoriales 
+(_) Desafío: Añadir una actividad de arranque (splash screen) con una animación 
+(_) Práctica: Transición de zoom (adaptada) 
+
+Unidad 2: Vistas personalizadas 
+(X) Ejercicio: La vista ZoomSeekBar 
+(X) Ejercicio: Reaccionando ante eventos de pantalla táctil en ZoomSeekBar 
+(X) Ejercicio: Implementando onMeasure en ZoomSeekBar 
+(X) Practica: Ajustando el espacio en ZoomSeekBar 
+(X) Ejercicio: Implementando métodos get y set en ZoomSeekBar 
+(X) Práctica: Creando métodos getter y setter en ZoomSeekBar 
+(X) Práctica: Creando nuevos atributos XML en ZoomSeekBar 
+(X) Práctica: Creando un escuchador de eventos en ZoomSeekBar 
+(X) Práctica: Incluir ZoomSeekBar en Audiolibros 
+Extras: 
+(_) Práctica: Incluir funcionalidad a ZoomSeekBar 
+(_) Desafío: Cambiar el valor mostrado en ZoomSeekBar a medida que se reproduce el audio
+
+
+Unidad 2: Widget de escritorio y notificación 
+(X) Ejercicio: Un widget de escritorio sencillo (adaptado) 
+(X) Ejercicio: Actualizando un widget de escritorio (adaptado) 
+(X) Ejercicio: Lanzando una actividad al pulsar una vista (adaptado) 
+
+Extras:
+
+(_) Ejercicio: Incrementando el contador al pulsar una vista (adaptado) 
+(X) Ejercicio: Añadiendo una actividad de configuración (adaptado) 
+(_) Desafío: Intercambio de imágenes play/pause 
+(_) Ejercicio: Lanzar notificación con Widget personalizado (adaptado) 
+(_) Ejercicio: Asociar una actividad a la notificación (adaptado) 
+(_) Desafío: Actuar ante pulsaciones en el widget de la notificación
