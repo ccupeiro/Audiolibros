@@ -156,7 +156,9 @@ public class ZoomSeekBar extends View {
                     if (val_0 > val) val++;
                     else val--;
                     invalidate(barRect);
-                    escuchador.colocarAudio(val);
+                    if(escuchador!=null){
+                        escuchador.colocarAudio(val);
+                    }
                 } else if (escalaRect.contains(x_0, y_0)) {
                     estado = Estado.ESCALA_PULSADA;
                     antVal_0 = val_0;
@@ -182,7 +184,9 @@ public class ZoomSeekBar extends View {
                 if (estado == Estado.PALANCA_PULSADA) {
                     val = ponDentroRango(val_0, escalaMin, escalaMax);
                     invalidate(barRect);
-                    escuchador.colocarAudio(val);
+                    if(escuchador!=null){
+                        escuchador.colocarAudio(val);
+                    }
                 }
                 if (estado == Estado.ESCALA_PULSADA_DOBLE) {
                     escalaMin = antVal_0 + (xIni - x_0) * (antVal_0 - antVal_1) / (x_0 - x_1);
