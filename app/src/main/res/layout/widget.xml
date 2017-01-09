@@ -31,11 +31,13 @@
         android:layout_height="match_parent"
         android:orientation="horizontal">
         <ImageView
+            android:id="@+id/iv_hamb"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:src="@drawable/hamb"/>
         <ImageView
+            android:id="@+id/iv_play"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"

@@ -47,6 +47,8 @@ public class ZoomSeekBar extends View {
     private Paint reglaPaint = new Paint();
     private Paint guiaPaint = new Paint();
     private Paint palancaPaint = new Paint();
+    //Listener
+    private OnZoomSeekBarListener escuchador;
 
     public ZoomSeekBar(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -78,6 +80,10 @@ public class ZoomSeekBar extends View {
         }
         textoPaint.setAntiAlias(true);
         textoPaint.setTextAlign(Paint.Align.CENTER);
+    }
+
+    public void setOnZoomSeekBarListener(OnZoomSeekBarListener escuchador){
+        this.escuchador = escuchador;
     }
 
     @Override
@@ -150,6 +156,7 @@ public class ZoomSeekBar extends View {
                     if (val_0 > val) val++;
                     else val--;
                     invalidate(barRect);
+                    escuchador.colocarAudio(val);
                 } else if (escalaRect.contains(x_0, y_0)) {
                     estado = Estado.ESCALA_PULSADA;
                     antVal_0 = val_0;
@@ -175,6 +182,7 @@ public class ZoomSeekBar extends View {
                 if (estado == Estado.PALANCA_PULSADA) {
                     val = ponDentroRango(val_0, escalaMin, escalaMax);
                     invalidate(barRect);
+                    escuchador.colocarAudio(val);
                 }
                 if (estado == Estado.ESCALA_PULSADA_DOBLE) {
                     escalaMin = antVal_0 + (xIni - x_0) * (antVal_0 - antVal_1) / (x_0 - x_1);
