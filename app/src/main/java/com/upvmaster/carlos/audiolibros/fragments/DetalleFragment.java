@@ -41,6 +41,36 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
         } else {
             ponInfoLibro(0, vista);
         }
+        //Poner aquí los cambios en ZoomSeekBar
+        //Probar con el seekTo para cambiar el zoomSeekBar
+        /* Hilo para que modifique el ZoomSeekBar
+        if (player != null) {
+    player.start();
+    timer = new Timer();
+    timer.scheduleAtFixedRate(new TimerTask() {
+        @Override
+        public void run() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (player != null && player.isPlaying()) {
+                        tv.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                tv.setText(player.getCurrentPosition());
+                            }
+                        });
+                    } else {
+                        timer.cancel();
+                        timer.purge();
+                    }
+                }
+            });
+        }
+    }, 0, 1000);
+}
+         */
+
         return vista;
     }
 
