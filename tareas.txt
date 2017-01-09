@@ -48,8 +48,8 @@ Unidad 2: Vistas personalizadas
 (X) Práctica: Creando un escuchador de eventos en ZoomSeekBar 
 (X) Práctica: Incluir ZoomSeekBar en Audiolibros 
 Extras: 
-(_) Práctica: Incluir funcionalidad a ZoomSeekBar 
-(_) Desafío: Cambiar el valor mostrado en ZoomSeekBar a medida que se reproduce el audio
+(X) Práctica: Incluir funcionalidad a ZoomSeekBar 
+(X) Desafío: Cambiar el valor mostrado en ZoomSeekBar a medida que se reproduce el audio
 
 
 Unidad 2: Widget de escritorio y notificación 

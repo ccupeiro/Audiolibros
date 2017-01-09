@@ -19,8 +19,14 @@ import com.upvmaster.carlos.audiolibros.R;
 import com.upvmaster.carlos.audiolibros.activities.MainActivity;
 import com.upvmaster.carlos.audiolibros.entities.Aplicacion;
 import com.upvmaster.carlos.audiolibros.entities.Libro;
+import com.upvmaster.carlos.audiolibros.views.OnZoomSeekBarListener;
+import com.upvmaster.carlos.audiolibros.views.ZoomSeekBar;
 
 import java.io.IOException;
+import java.util.Timer;
+import java.util.TimerTask;
+import android.os.Handler;
+import java.util.logging.LogRecord;
 
 /**
  * Created by carlos.cupeiro on 22/12/2016.
@@ -30,6 +36,20 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
     public static String ARG_ID_LIBRO = "id_libro";
     MediaPlayer mediaPlayer;
     MediaController mediaController;
+    private ZoomSeekBar zoombar;
+    private Handler mHandler;
+    private Runnable run_tiempo = new Runnable() {
+
+        @Override
+        public void run() {
+            if(mediaPlayer != null){
+                int mCurrentPosition = mediaPlayer.getCurrentPosition() / 1000;
+                zoombar.setVal(mCurrentPosition);
+            }
+            mHandler.postDelayed(this, 1000);
+        }
+    };
+
 
     @Override
     public View onCreateView(LayoutInflater inflador, ViewGroup contenedor, Bundle savedInstanceState) {
@@ -42,34 +62,20 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
             ponInfoLibro(0, vista);
         }
         //Poner aquí los cambios en ZoomSeekBar
+        zoombar = (ZoomSeekBar) vista.findViewById(R.id.zoombar);
+        zoombar.setVisibility(View.INVISIBLE);
         //Probar con el seekTo para cambiar el zoomSeekBar
-        /* Hilo para que modifique el ZoomSeekBar
-        if (player != null) {
-    player.start();
-    timer = new Timer();
-    timer.scheduleAtFixedRate(new TimerTask() {
-        @Override
-        public void run() {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (player != null && player.isPlaying()) {
-                        tv.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                tv.setText(player.getCurrentPosition());
-                            }
-                        });
-                    } else {
-                        timer.cancel();
-                        timer.purge();
-                    }
-                }
-            });
-        }
-    }, 0, 1000);
-}
-         */
+        zoombar.setOnZoomSeekBarListener(new OnZoomSeekBarListener() {
+            @Override
+            public void colocarAudio(int posicion) {
+                if(mediaPlayer!=null)
+                    mediaPlayer.seekTo(posicion*1000);
+            }
+        });
+        mHandler = new Handler();
+        //Make sure you update Seekbar on UI thread
+        getActivity().runOnUiThread(run_tiempo);
+
 
         return vista;
     }
@@ -115,6 +121,15 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
         mediaController.setPadding(0, 0, 0, 110);
         mediaController.setEnabled(true);
         mediaController.show();
+        //Poner el Zoombar
+        zoombar.setValMin(0);
+        zoombar.setEscalaMin(0);
+        zoombar.setEscalaIni(0);
+        zoombar.setEscalaRaya(5000);
+        zoombar.setEscalaRayaLarga(50);
+        zoombar.setValMax(mediaPlayer.getDuration());
+        zoombar.setEscalaMax(mediaPlayer.getDuration()/1000);
+        zoombar.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -134,6 +149,7 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
 
     @Override
     public void onStop() {
+        mHandler.removeCallbacks(run_tiempo);
         mediaController.hide();
         try {
             mediaPlayer.stop();
