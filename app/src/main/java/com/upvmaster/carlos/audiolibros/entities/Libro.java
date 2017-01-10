@@ -16,6 +16,8 @@ public class Libro {
     public String genero; // Género literario
     public Boolean novedad; // Es una novedad
     public Boolean leido; // Leído por el usuario
+    public int colorVibrante = -1, colorApagado = -1;
+
     public final static String G_TODOS = "Todos los géneros";
     public final static String G_EPICO = "Poema épico";
     public final static String G_S_XIX = "Literatura siglo XIX";

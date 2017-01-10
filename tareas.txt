@@ -31,11 +31,11 @@ Extras:
 (X) Práctica: Animación de propiedades compartir en Audiolibros 
 (X) Ejercicio: Visualizar animación insertar en un RecyclerView 
 (X) Ejercicio: Extraer paleta de colores de una imagen 
-(_) Práctica: Extraer paleta de colores de forma eficiente 
+(X) Práctica: Extraer paleta de colores de forma eficiente 
 (X) Ejercicio: Crear un gráfico vectorial 
 (X) Ejercicio: Un editor SVG para crear gráficos vectoriales 
-(_) Desafío: Añadir una actividad de arranque (splash screen) con una animación 
-(_) Práctica: Transición de zoom (adaptada) 
+(X) Desafío: Añadir una actividad de arranque (splash screen) con una animación 
+(X) Práctica: Transición de zoom (adaptada) 
 
 Unidad 2: Vistas personalizadas 
 (X) Ejercicio: La vista ZoomSeekBar 

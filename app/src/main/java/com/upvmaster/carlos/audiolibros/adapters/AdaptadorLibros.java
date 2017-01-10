@@ -64,33 +64,44 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
     // Usando como base el ViewHolder y lo personalizamos
     @Override
     public void onBindViewHolder(final ViewHolder holder, int posicion) {
-        Libro libro = listaLibros.get(posicion);
+        final Libro libro = listaLibros.get(posicion);
         Aplicacion aplicacion = (Aplicacion) contexto.getApplicationContext();
         aplicacion.getLectorImagenes().get(libro.urlImagen, new ImageLoader.ImageListener() {
-            @Override
-            public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-                Bitmap bitmap = response.getBitmap();
-                if (bitmap != null) {
-                    holder.portada.setImageBitmap(bitmap);
-                    Palette palette = Palette.from(bitmap).generate();
-                    holder.itemView.setBackgroundColor(palette.getLightMutedColor(0));
-                    holder.titulo.setBackgroundColor(palette.getLightVibrantColor(0));
-                    holder.portada.invalidate();
+                    @Override
+                    public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
+                        Bitmap bitmap = response.getBitmap();
+                        if (bitmap != null) {
+                            holder.portada.setImageBitmap(bitmap);
+                            if (libro.colorVibrante == -1 || libro.colorApagado == -1) {
+                                Palette.from(bitmap)
+                                        .generate(new Palette.PaletteAsyncListener() {
+                                        public void onGenerated(Palette palette) {
+                                            libro.colorVibrante=palette.getLightVibrantColor(0);
+                                            libro.colorApagado = palette.getLightMutedColor(0);
+                                            holder.itemView.setBackgroundColor(libro.colorApagado);
+                                            holder.titulo.setBackgroundColor(libro.colorVibrante);
+                                            holder.portada.invalidate();
+                                        }}
+
+                                        );
+                            }
+                        }
+                    }
+
+                        @Override
+                        public void onErrorResponse (VolleyError error){
+                            holder.portada.setImageResource(R.drawable.books);
+                        }
+                    }
+
+                    );
+                    holder.titulo.setText(libro.titulo);
                 }
-            }
 
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                holder.portada.setImageResource(R.drawable.books);
-            }
-        });
-        holder.titulo.setText(libro.titulo);
+                // Indicamos el número de elementos de la lista
+        @Override
+        public int getItemCount () {
+            return listaLibros.size();
+        }
+
     }
-
-    // Indicamos el número de elementos de la lista
-    @Override
-    public int getItemCount() {
-        return listaLibros.size();
-    }
-
-}
