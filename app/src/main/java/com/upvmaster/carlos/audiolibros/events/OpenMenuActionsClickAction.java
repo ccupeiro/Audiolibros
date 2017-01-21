@@ -20,7 +20,7 @@ import com.upvmaster.carlos.audiolibros.fragments.SelectorFragment;
  * Created by Carlos on 21/01/2017.
  */
 
-public class OpenMenuActionsClickAction implements ClickAction, Animation.AnimationListener{
+public class OpenMenuActionsClickAction implements ClickAction{
     private final MainActivity mainActivity;
     private final View view;
 
@@ -72,10 +72,8 @@ public class OpenMenuActionsClickAction implements ClickAction, Animation.Animat
                         Snackbar.make(view, "¿Estás seguro?", Snackbar.LENGTH_LONG).setAction("SI", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                Animation anim = AnimationUtils.loadAnimation(mainActivity, R.anim.menguar);
-                                anim.setAnimationListener(OpenMenuActionsClickAction.this);
-                                view.startAnimation(anim);
                                 ((Aplicacion)mainActivity.getApplication()).getAdaptador().borrar(position);
+                                ((Aplicacion)mainActivity.getApplication()).getAdaptador().notifyDataSetChanged();
                             }
                         }).show();
                         break;
@@ -96,19 +94,4 @@ public class OpenMenuActionsClickAction implements ClickAction, Animation.Animat
         menu.create().show();
     }
 
-    //Animation
-    @Override
-    public void onAnimationStart(Animation animation) {
-
-    }
-
-    @Override
-    public void onAnimationEnd(Animation animation) {
-        ((Aplicacion)mainActivity.getApplication()).getAdaptador().notifyDataSetChanged();
-    }
-
-    @Override
-    public void onAnimationRepeat(Animation animation) {
-
-    }
 }
