@@ -1,7 +1,6 @@
 package com.upvmaster.carlos.audiolibros.activities;
 
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -25,6 +24,8 @@ import com.upvmaster.carlos.audiolibros.R;
 import com.upvmaster.carlos.audiolibros.adapters.AdaptadorLibrosFiltro;
 import com.upvmaster.carlos.audiolibros.entities.Aplicacion;
 import com.upvmaster.carlos.audiolibros.entities.Libro;
+import com.upvmaster.carlos.audiolibros.entities.LibroStorage;
+import com.upvmaster.carlos.audiolibros.entities.LibroStoragePreferencesStorage;
 import com.upvmaster.carlos.audiolibros.fragments.DetalleFragment;
 import com.upvmaster.carlos.audiolibros.fragments.PreferenciasFragment;
 import com.upvmaster.carlos.audiolibros.fragments.SelectorFragment;
@@ -35,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private AdaptadorLibrosFiltro adaptador;
+    private LibroStorage libroStoragePreferencesStorage;
 
     private AppBarLayout appBarLayout;
     private TabLayout tabs;
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        libroStoragePreferencesStorage = new LibroStoragePreferencesStorage(this);
         int idContenedor = (findViewById(R.id.contenedor_pequeno) != null)
                 ? R.id.contenedor_pequeno : R.id.contenedor_izquierdo;
         SelectorFragment primerFragment = new SelectorFragment();
@@ -159,11 +162,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     public void irUltimoVisitado() {
-        SharedPreferences pref = getSharedPreferences(
-                "com.upvmaster.carlos.audiolibros_internal", MODE_PRIVATE);
-        int id = pref.getInt("ultimo", -1);
-        if (id >= 0) {
-            mostrarDetalle(id);
+        if (libroStoragePreferencesStorage.hasLastBook()) {
+            mostrarDetalle(libroStoragePreferencesStorage.getLastBook());
         } else {
             Toast.makeText(this, "Sin última vista", Toast.LENGTH_LONG).show();
         }

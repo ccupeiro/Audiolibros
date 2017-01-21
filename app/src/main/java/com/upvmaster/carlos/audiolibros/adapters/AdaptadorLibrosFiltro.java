@@ -6,12 +6,14 @@ import com.upvmaster.carlos.audiolibros.entities.Libro;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by carlos.cupeiro on 22/12/2016.
  */
 
-public class AdaptadorLibrosFiltro extends AdaptadorLibros {
+public class AdaptadorLibrosFiltro extends AdaptadorLibros implements Observer {
     private List<Libro> listaSinFiltros;// Vector con todos los libros
     private List<Integer> indiceFiltro; // Índice en listaSinFiltros de Cada elemento de vectorLibros
     private String busqueda = ""; // Búsqueda sobre autor o título
@@ -74,7 +76,13 @@ public class AdaptadorLibrosFiltro extends AdaptadorLibros {
     }
 
     public void insertar(Libro libro) {
-        listaSinFiltros.add(0,libro);
+        listaSinFiltros.add(0, libro);
         recalculaFiltro();
+    }
+
+    @Override
+    public void update(Observable observable, Object data) {
+        setBusqueda((String) data);
+        notifyDataSetChanged();
     }
 }

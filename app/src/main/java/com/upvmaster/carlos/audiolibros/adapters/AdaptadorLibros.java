@@ -15,6 +15,8 @@ import com.android.volley.toolbox.ImageLoader;
 import com.upvmaster.carlos.audiolibros.entities.Aplicacion;
 import com.upvmaster.carlos.audiolibros.entities.Libro;
 import com.upvmaster.carlos.audiolibros.R;
+import com.upvmaster.carlos.audiolibros.events.ClickAction;
+import com.upvmaster.carlos.audiolibros.events.EmptyClickAction;
 
 import java.util.List;
 
@@ -25,8 +27,8 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
     private LayoutInflater inflador; //Crea Layouts a partir del XML protected
     List<Libro> listaLibros; //Vector con libros a visualizar
     private Context contexto;
-    private View.OnClickListener onClickListener;
-    private View.OnLongClickListener onLongClickListener;
+    private ClickAction clickAction = new EmptyClickAction();
+    private ClickAction longClickAction = new EmptyClickAction();
 
     public AdaptadorLibros(Context contexto, List<Libro> listaLibros) {
         inflador = (LayoutInflater) contexto.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -34,12 +36,12 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
         this.contexto = contexto;
     } //Creamos nuestro ViewHolder, con los tipos de elementos a modificar
 
-    public void setOnItemClickListener(View.OnClickListener onClickListener) {
-        this.onClickListener = onClickListener;
+    public void setClickAction(ClickAction clickAction) {
+        this.clickAction = clickAction;
     }
 
-    public void setOnItemLongClickListener(View.OnLongClickListener onLongClickListener) {
-        this.onLongClickListener = onLongClickListener;
+    public void setLongClickAction(ClickAction longClickAction) {
+        this.longClickAction = longClickAction;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -56,14 +58,25 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) { // Inflamos la vista desde el xml
         View v = inflador.inflate(R.layout.elemento_selector, null);
-        v.setOnClickListener(onClickListener);
-        v.setOnLongClickListener(onLongClickListener);
         return new ViewHolder(v);
     }
 
     // Usando como base el ViewHolder y lo personalizamos
     @Override
-    public void onBindViewHolder(final ViewHolder holder, int posicion) {
+    public void onBindViewHolder(final ViewHolder holder, final int posicion) {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clickAction.execute(posicion);
+            }
+        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                longClickAction.execute(posicion);
+                return true;
+            }
+        });
         final Libro libro = listaLibros.get(posicion);
         Aplicacion aplicacion = (Aplicacion) contexto.getApplicationContext();
         aplicacion.getLectorImagenes().get(libro.urlImagen, new ImageLoader.ImageListener() {
@@ -75,33 +88,34 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
                             if (libro.colorVibrante == -1 || libro.colorApagado == -1) {
                                 Palette.from(bitmap)
                                         .generate(new Palette.PaletteAsyncListener() {
-                                        public void onGenerated(Palette palette) {
-                                            libro.colorVibrante=palette.getLightVibrantColor(0);
-                                            libro.colorApagado = palette.getLightMutedColor(0);
-                                            holder.itemView.setBackgroundColor(libro.colorApagado);
-                                            holder.titulo.setBackgroundColor(libro.colorVibrante);
-                                            holder.portada.invalidate();
-                                        }}
+                                                      public void onGenerated(Palette palette) {
+                                                          libro.colorVibrante = palette.getLightVibrantColor(0);
+                                                          libro.colorApagado = palette.getLightMutedColor(0);
+                                                          holder.itemView.setBackgroundColor(libro.colorApagado);
+                                                          holder.titulo.setBackgroundColor(libro.colorVibrante);
+                                                          holder.portada.invalidate();
+                                                      }
+                                                  }
 
                                         );
                             }
                         }
                     }
 
-                        @Override
-                        public void onErrorResponse (VolleyError error){
-                            holder.portada.setImageResource(R.drawable.books);
-                        }
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        holder.portada.setImageResource(R.drawable.books);
                     }
-
-                    );
-                    holder.titulo.setText(libro.titulo);
                 }
 
-                // Indicamos el número de elementos de la lista
-        @Override
-        public int getItemCount () {
-            return listaLibros.size();
-        }
-
+        );
+        holder.titulo.setText(libro.titulo);
     }
+
+    // Indicamos el número de elementos de la lista
+    @Override
+    public int getItemCount() {
+        return listaLibros.size();
+    }
+
+}
