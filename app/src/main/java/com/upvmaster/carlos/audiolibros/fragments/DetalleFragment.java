@@ -122,13 +122,14 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
         mediaController.setEnabled(true);
         mediaController.show();
         //Poner el Zoombar
+        int duracionAudio = mediaPlayer.getDuration() / 1000;
         zoombar.setValMin(0);
         zoombar.setEscalaMin(0);
         zoombar.setEscalaIni(0);
-        zoombar.setEscalaRaya(5000);
-        zoombar.setEscalaRayaLarga(50);
-        zoombar.setValMax(mediaPlayer.getDuration());
-        zoombar.setEscalaMax(mediaPlayer.getDuration()/1000);
+        zoombar.setEscalaRaya(duracionAudio/50);
+        zoombar.setEscalaRayaLarga(10);
+        zoombar.setValMax(duracionAudio);
+        zoombar.setEscalaMax(duracionAudio);
         zoombar.setVisibility(View.VISIBLE);
     }
 
