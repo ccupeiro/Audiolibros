@@ -1,7 +1,6 @@
-package com.upvmaster.carlos.audiolibros.activities;
+package com.upvmaster.carlos.audiolibros.Main;
 
 import android.app.FragmentTransaction;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -23,20 +22,19 @@ import android.widget.Toast;
 import com.upvmaster.carlos.audiolibros.R;
 import com.upvmaster.carlos.audiolibros.adapters.AdaptadorLibrosFiltro;
 import com.upvmaster.carlos.audiolibros.entities.Libro;
-import com.upvmaster.carlos.audiolibros.entities.LibroStorage;
 import com.upvmaster.carlos.audiolibros.entities.LibroSharedPrefenceStorage;
 import com.upvmaster.carlos.audiolibros.entities.LibrosSingleton;
-import com.upvmaster.carlos.audiolibros.fragments.DetalleFragment;
+import com.upvmaster.carlos.audiolibros.Detalle.DetalleFragment;
 import com.upvmaster.carlos.audiolibros.fragments.PreferenciasFragment;
 import com.upvmaster.carlos.audiolibros.fragments.SelectorFragment;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,MainPresenter.View {
 
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
     private AdaptadorLibrosFiltro adaptador;
-    private LibroStorage libroStoragePreferencesStorage;
+    private MainPresenter presenter;
 
     private AppBarLayout appBarLayout;
     private TabLayout tabs;
@@ -47,7 +45,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        libroStoragePreferencesStorage = LibroSharedPrefenceStorage.getInstance(this);
+        presenter = new MainPresenter(LibroSharedPrefenceStorage.getInstance(this),this);
         int idContenedor = (findViewById(R.id.contenedor_pequeno) != null)
                 ? R.id.contenedor_pequeno : R.id.contenedor_izquierdo;
         SelectorFragment primerFragment = new SelectorFragment();
@@ -112,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                irUltimoVisitado();
+                presenter.clickFavoriteButton();
             }
         });
 
@@ -138,12 +136,18 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
+
     public void mostrarDetalle(int id) {
-        SharedPreferences pref = getSharedPreferences(
-                "com.upvmaster.carlos.audiolibros_internal", MODE_PRIVATE);
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putInt("ultimo", id);
-        editor.commit();
+       presenter.openDetalle(id);
+    }
+
+    @Override
+    public void mostrarNoUltimaVisita() {
+        Toast.makeText(this, "Sin última vista",Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void mostrarFragmentDetalle(int id) {
         DetalleFragment detalleFragment = (DetalleFragment) getFragmentManager().findFragmentById(R.id.detalle_fragment);
         if (detalleFragment != null) {
             detalleFragment.ponInfoLibro(id);
@@ -158,15 +162,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             transaccion.addToBackStack(null);
             transaccion.commit();
         }
-
     }
 
+
     public void irUltimoVisitado() {
-        if (libroStoragePreferencesStorage.hasLastBook()) {
-            mostrarDetalle(libroStoragePreferencesStorage.getLastBook());
-        } else {
-            Toast.makeText(this, "Sin última vista", Toast.LENGTH_LONG).show();
-        }
+        presenter.clickFavoriteButton();
     }
 
     @Override

@@ -7,6 +7,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import com.upvmaster.carlos.audiolibros.Main.MainActivity;
 import com.upvmaster.carlos.audiolibros.R;
 
 public class SplashActivity extends AppCompatActivity implements Animation.AnimationListener {

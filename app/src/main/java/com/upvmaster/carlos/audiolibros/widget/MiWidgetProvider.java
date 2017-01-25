@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 import com.upvmaster.carlos.audiolibros.R;
-import com.upvmaster.carlos.audiolibros.activities.MainActivity;
+import com.upvmaster.carlos.audiolibros.Main.MainActivity;
 import com.upvmaster.carlos.audiolibros.entities.Libro;
 import com.upvmaster.carlos.audiolibros.entities.LibroStorage;
 import com.upvmaster.carlos.audiolibros.entities.LibroSharedPrefenceStorage;

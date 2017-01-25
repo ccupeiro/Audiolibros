@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 
 import com.upvmaster.carlos.audiolibros.R;
-import com.upvmaster.carlos.audiolibros.activities.MainActivity;
+import com.upvmaster.carlos.audiolibros.Main.MainActivity;
 
 /**
  * Created by carlos.cupeiro on 05/01/2017.

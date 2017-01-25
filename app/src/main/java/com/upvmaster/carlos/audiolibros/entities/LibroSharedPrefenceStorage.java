@@ -37,4 +37,9 @@ public class LibroSharedPrefenceStorage implements LibroStorage {
     public int getLastBook() {
         return getPreference().getInt(KEY_ULTIMO_LIBRO, -1);
     }
+
+    public void saveLastBook(int id) {
+        getPreference().edit().putInt(KEY_ULTIMO_LIBRO,id).commit();
+    }
+
 }

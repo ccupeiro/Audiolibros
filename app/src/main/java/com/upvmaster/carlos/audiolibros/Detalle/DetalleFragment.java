@@ -1,4 +1,4 @@
-package com.upvmaster.carlos.audiolibros.fragments;
+package com.upvmaster.carlos.audiolibros.Detalle;
 
 import android.app.Fragment;
 import android.content.SharedPreferences;
@@ -16,7 +16,7 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.upvmaster.carlos.audiolibros.R;
-import com.upvmaster.carlos.audiolibros.activities.MainActivity;
+import com.upvmaster.carlos.audiolibros.Main.MainActivity;
 import com.upvmaster.carlos.audiolibros.entities.Libro;
 import com.upvmaster.carlos.audiolibros.entities.LibrosSingleton;
 import com.upvmaster.carlos.audiolibros.entities.VolleySingleton;
@@ -24,10 +24,8 @@ import com.upvmaster.carlos.audiolibros.views.OnZoomSeekBarListener;
 import com.upvmaster.carlos.audiolibros.views.ZoomSeekBar;
 
 import java.io.IOException;
-import java.util.Timer;
-import java.util.TimerTask;
+
 import android.os.Handler;
-import java.util.logging.LogRecord;
 
 /**
  * Created by carlos.cupeiro on 22/12/2016.

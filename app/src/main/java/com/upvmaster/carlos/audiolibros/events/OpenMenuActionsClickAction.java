@@ -7,14 +7,11 @@ import android.content.Intent;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
 import com.upvmaster.carlos.audiolibros.R;
-import com.upvmaster.carlos.audiolibros.activities.MainActivity;
+import com.upvmaster.carlos.audiolibros.Main.MainActivity;
 import com.upvmaster.carlos.audiolibros.entities.Libro;
 import com.upvmaster.carlos.audiolibros.entities.LibrosSingleton;
-import com.upvmaster.carlos.audiolibros.fragments.SelectorFragment;
 
 /**
  * Created by Carlos on 21/01/2017.

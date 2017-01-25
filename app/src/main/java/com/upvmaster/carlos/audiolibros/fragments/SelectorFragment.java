@@ -1,15 +1,9 @@
 package com.upvmaster.carlos.audiolibros.fragments;
 
-import android.animation.Animator;
-import android.animation.AnimatorInflater;
 import android.app.Activity;
 import android.app.Fragment;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -20,11 +14,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 
 import com.upvmaster.carlos.audiolibros.R;
-import com.upvmaster.carlos.audiolibros.activities.MainActivity;
+import com.upvmaster.carlos.audiolibros.Main.MainActivity;
 import com.upvmaster.carlos.audiolibros.adapters.AdaptadorLibrosFiltro;
 import com.upvmaster.carlos.audiolibros.adapters.SearchObservable;
 import com.upvmaster.carlos.audiolibros.entities.Libro;

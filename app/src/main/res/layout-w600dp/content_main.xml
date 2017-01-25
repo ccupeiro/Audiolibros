@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.upvmaster.carlos.audiolibros.activities.MainActivity"
+    tools:context="com.upvmaster.carlos.audiolibros.Main.MainActivity"
     tools:showIn="@layout/activity_main">
 
     <LinearLayout
@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/detalle_fragment"
-        android:name="com.upvmaster.carlos.audiolibros.fragments.DetalleFragment"
+        android:name="com.upvmaster.carlos.audiolibros.Detalle.DetalleFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1" />
