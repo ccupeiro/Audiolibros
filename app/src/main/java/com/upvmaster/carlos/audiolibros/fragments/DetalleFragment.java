@@ -17,8 +17,9 @@ import android.widget.TextView;
 import com.android.volley.toolbox.NetworkImageView;
 import com.upvmaster.carlos.audiolibros.R;
 import com.upvmaster.carlos.audiolibros.activities.MainActivity;
-import com.upvmaster.carlos.audiolibros.entities.Aplicacion;
 import com.upvmaster.carlos.audiolibros.entities.Libro;
+import com.upvmaster.carlos.audiolibros.entities.LibrosSingleton;
+import com.upvmaster.carlos.audiolibros.entities.VolleySingleton;
 import com.upvmaster.carlos.audiolibros.views.OnZoomSeekBarListener;
 import com.upvmaster.carlos.audiolibros.views.ZoomSeekBar;
 
@@ -81,13 +82,11 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
     }
 
     private void ponInfoLibro(int id, View vista) {
-        Libro libro = ((Aplicacion) getActivity().getApplication())
-                .getListLibros().get(id);
+        Libro libro = LibrosSingleton.getInstance(vista.getContext()).getListaLibros().get(id);
         ((TextView) vista.findViewById(R.id.titulo)).setText(libro.titulo);
         ((TextView) vista.findViewById(R.id.autor)).setText(libro.autor);
-        Aplicacion aplicacion = (Aplicacion) getActivity().getApplication();
         ((NetworkImageView) vista.findViewById(R.id.portada)).
-                setImageUrl(libro.urlImagen, aplicacion.getLectorImagenes());
+                setImageUrl(libro.urlImagen, VolleySingleton.getInstance(vista.getContext()).getLectorImagenes());
         vista.setOnTouchListener(this);
         if (mediaPlayer != null) {
             mediaPlayer.release();

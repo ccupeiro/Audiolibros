@@ -12,8 +12,8 @@ import android.view.animation.AnimationUtils;
 
 import com.upvmaster.carlos.audiolibros.R;
 import com.upvmaster.carlos.audiolibros.activities.MainActivity;
-import com.upvmaster.carlos.audiolibros.entities.Aplicacion;
 import com.upvmaster.carlos.audiolibros.entities.Libro;
+import com.upvmaster.carlos.audiolibros.entities.LibrosSingleton;
 import com.upvmaster.carlos.audiolibros.fragments.SelectorFragment;
 
 /**
@@ -42,7 +42,7 @@ public class OpenMenuActionsClickAction implements ClickAction{
                         anim.addListener(new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animator) {
-                                Libro libro = ((Aplicacion)mainActivity.getApplication()).getListLibros().get(position);
+                                Libro libro =  LibrosSingleton.getInstance(view.getContext()).getListaLibros().get(position);
                                 Intent i = new Intent(Intent.ACTION_SEND);
                                 i.setType("text/plain");
                                 i.putExtra(Intent.EXTRA_SUBJECT, libro.titulo);
@@ -72,16 +72,16 @@ public class OpenMenuActionsClickAction implements ClickAction{
                         Snackbar.make(view, "¿Estás seguro?", Snackbar.LENGTH_LONG).setAction("SI", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                ((Aplicacion)mainActivity.getApplication()).getAdaptador().borrar(position);
-                                ((Aplicacion)mainActivity.getApplication()).getAdaptador().notifyDataSetChanged();
+                                LibrosSingleton.getInstance(view.getContext()).getAdaptadorLibros().borrar(position);
+                                LibrosSingleton.getInstance(view.getContext()).getAdaptadorLibros().notifyDataSetChanged();
                             }
                         }).show();
                         break;
                     case 2: //Insertar
-                        ((Aplicacion)mainActivity.getApplication()).getAdaptador().insertar(
-                                ((Aplicacion)mainActivity.getApplication()).getAdaptador().getItem(position));
+                        LibrosSingleton.getInstance(view.getContext()).getAdaptadorLibros().insertar(
+                                LibrosSingleton.getInstance(view.getContext()).getAdaptadorLibros().getItem(position));
                         //adaptador.notifyDataSetChanged();
-                        ((Aplicacion)mainActivity.getApplication()).getAdaptador().notifyItemInserted(0);
+                        LibrosSingleton.getInstance(view.getContext()).getAdaptadorLibros().notifyItemInserted(0);
                         Snackbar.make(view, "Libro insertado", Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {

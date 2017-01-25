@@ -22,10 +22,10 @@ import android.widget.Toast;
 
 import com.upvmaster.carlos.audiolibros.R;
 import com.upvmaster.carlos.audiolibros.adapters.AdaptadorLibrosFiltro;
-import com.upvmaster.carlos.audiolibros.entities.Aplicacion;
 import com.upvmaster.carlos.audiolibros.entities.Libro;
 import com.upvmaster.carlos.audiolibros.entities.LibroStorage;
-import com.upvmaster.carlos.audiolibros.entities.LibroStoragePreferencesStorage;
+import com.upvmaster.carlos.audiolibros.entities.LibroSharedPrefenceStorage;
+import com.upvmaster.carlos.audiolibros.entities.LibrosSingleton;
 import com.upvmaster.carlos.audiolibros.fragments.DetalleFragment;
 import com.upvmaster.carlos.audiolibros.fragments.PreferenciasFragment;
 import com.upvmaster.carlos.audiolibros.fragments.SelectorFragment;
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        libroStoragePreferencesStorage = new LibroStoragePreferencesStorage(this);
+        libroStoragePreferencesStorage = LibroSharedPrefenceStorage.getInstance(this);
         int idContenedor = (findViewById(R.id.contenedor_pequeno) != null)
                 ? R.id.contenedor_pequeno : R.id.contenedor_izquierdo;
         SelectorFragment primerFragment = new SelectorFragment();
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         appBarLayout = (AppBarLayout) findViewById(R.id.appBarLayout);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        adaptador = ((Aplicacion) getApplicationContext()).getAdaptador();
+        adaptador = LibrosSingleton.getInstance(this).getAdaptadorLibros();
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);

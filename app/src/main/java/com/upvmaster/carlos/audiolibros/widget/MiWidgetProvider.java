@@ -11,7 +11,7 @@ import com.upvmaster.carlos.audiolibros.R;
 import com.upvmaster.carlos.audiolibros.activities.MainActivity;
 import com.upvmaster.carlos.audiolibros.entities.Libro;
 import com.upvmaster.carlos.audiolibros.entities.LibroStorage;
-import com.upvmaster.carlos.audiolibros.entities.LibroStoragePreferencesStorage;
+import com.upvmaster.carlos.audiolibros.entities.LibroSharedPrefenceStorage;
 
 /**
  * Created by Carlos on 08/01/2017.
@@ -27,7 +27,7 @@ public class MiWidgetProvider extends AppWidgetProvider {
 
     public static void actualizaWidget(Context context, int widgetId) {
         int id = 0;
-        LibroStorage libroStoragePreferencesStorage = new LibroStoragePreferencesStorage(context);
+        LibroStorage libroStoragePreferencesStorage =LibroSharedPrefenceStorage.getInstance(context);
         if(libroStoragePreferencesStorage.hasLastBook()){
             id = libroStoragePreferencesStorage.getLastBook();
         }

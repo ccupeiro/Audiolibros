@@ -27,8 +27,8 @@ import com.upvmaster.carlos.audiolibros.R;
 import com.upvmaster.carlos.audiolibros.activities.MainActivity;
 import com.upvmaster.carlos.audiolibros.adapters.AdaptadorLibrosFiltro;
 import com.upvmaster.carlos.audiolibros.adapters.SearchObservable;
-import com.upvmaster.carlos.audiolibros.entities.Aplicacion;
 import com.upvmaster.carlos.audiolibros.entities.Libro;
+import com.upvmaster.carlos.audiolibros.entities.LibrosSingleton;
 import com.upvmaster.carlos.audiolibros.events.OpenDetailClickAction;
 import com.upvmaster.carlos.audiolibros.events.OpenMenuActionsClickAction;
 
@@ -48,9 +48,8 @@ public class SelectorFragment extends Fragment {
     public void onAttach(Activity actividad) {
         super.onAttach(actividad);
         this.actividad = actividad;
-        Aplicacion app = (Aplicacion) actividad.getApplication();
-        adaptador = app.getAdaptador();
-        listaLibros = app.getListLibros();
+        adaptador = LibrosSingleton.getInstance(actividad).getAdaptadorLibros();
+        listaLibros = LibrosSingleton.getInstance(actividad).getListaLibros();
 
     }
 
