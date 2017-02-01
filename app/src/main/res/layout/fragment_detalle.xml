@@ -5,7 +5,7 @@
     android:id="@+id/fragment_detalle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Main.MainActivity">
+    tools:context=".main.view.MainActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -46,7 +46,7 @@
             android:scaleType="fitCenter"
             android:src="@mipmap/ic_launcher" />
 
-        <com.upvmaster.carlos.audiolibros.views.ZoomSeekBar
+        <com.upvmaster.carlos.audiolibros.detail.view.ZoomSeekBar
             android:id="@+id/zoombar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

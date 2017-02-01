@@ -8,10 +8,12 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 import com.upvmaster.carlos.audiolibros.R;
-import com.upvmaster.carlos.audiolibros.Main.MainActivity;
-import com.upvmaster.carlos.audiolibros.entities.Libro;
-import com.upvmaster.carlos.audiolibros.entities.LibroStorage;
-import com.upvmaster.carlos.audiolibros.entities.LibroSharedPrefenceStorage;
+import com.upvmaster.carlos.audiolibros.main.view.MainActivity;
+import com.upvmaster.carlos.audiolibros.main.data.BooksRepository;
+import com.upvmaster.carlos.audiolibros.main.data.datasources.Libro;
+import com.upvmaster.carlos.audiolibros.main.data.datasources.LibroSharedPrefenceStorage;
+import com.upvmaster.carlos.audiolibros.main.domain.GetLastBook;
+import com.upvmaster.carlos.audiolibros.main.domain.HasLastBook;
 
 /**
  * Created by Carlos on 08/01/2017.
@@ -27,9 +29,9 @@ public class MiWidgetProvider extends AppWidgetProvider {
 
     public static void actualizaWidget(Context context, int widgetId) {
         int id = 0;
-        LibroStorage libroStoragePreferencesStorage =LibroSharedPrefenceStorage.getInstance(context);
-        if(libroStoragePreferencesStorage.hasLastBook()){
-            id = libroStoragePreferencesStorage.getLastBook();
+        BooksRepository booksRepository = new BooksRepository(LibroSharedPrefenceStorage.getInstance(context));
+        if(new HasLastBook(booksRepository).execute()){
+            id = new GetLastBook(booksRepository).execute();
         }
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget);
         if (id >= 0 && id < Libro.ejemploLibros().size()) {

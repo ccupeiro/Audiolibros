@@ -10,7 +10,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_horizontal_margin"
     android:gravity="center"
-    tools:context="com.upvmaster.carlos.audiolibros.activities.SplashActivity">
+    tools:context="com.upvmaster.carlos.audiolibros.common.view.SplashActivity">
 
     <ImageView
         android:id="@+id/iv_splash_logo"
