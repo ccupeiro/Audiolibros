@@ -24,6 +24,7 @@ public class DetallePresenter {
 
     public interface View {
         void ponInfoLibro(Libro book);
+        void updateZoomSeekBar();
         void playAudio(MediaPlayer mediaPlayer);
         void pauseAudio(MediaPlayer mediaPlayer);
         void stopAudio(MediaPlayer mediaPlayer);

@@ -1,4 +1,4 @@
-package com.upvmaster.carlos.audiolibros.common.view;
+package com.upvmaster.carlos.audiolibros.main.view;
 
 import android.app.Activity;
 import android.app.Fragment;

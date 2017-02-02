@@ -19,9 +19,10 @@
         android:src="@android:drawable/sym_def_app_icon" />
 
     <TextView
+        android:id="@+id/txtName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
+        android:paddingTop="0dp"
         android:text="Audiolibros"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
 

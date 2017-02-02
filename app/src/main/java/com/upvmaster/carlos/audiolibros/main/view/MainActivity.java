@@ -1,6 +1,8 @@
 package com.upvmaster.carlos.audiolibros.main.view;
 
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -16,9 +18,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.upvmaster.carlos.audiolibros.R;
+import com.upvmaster.carlos.audiolibros.login.view.LoginActivity;
 import com.upvmaster.carlos.audiolibros.main.view.adapters.AdaptadorLibrosFiltro;
 import com.upvmaster.carlos.audiolibros.main.data.BooksRepository;
 import com.upvmaster.carlos.audiolibros.main.data.datasources.Libro;
@@ -26,7 +33,6 @@ import com.upvmaster.carlos.audiolibros.main.data.datasources.LibroSharedPrefenc
 import com.upvmaster.carlos.audiolibros.main.data.datasources.LibrosSingleton;
 import com.upvmaster.carlos.audiolibros.detail.view.DetalleFragment;
 import com.upvmaster.carlos.audiolibros.common.view.PreferenciasFragment;
-import com.upvmaster.carlos.audiolibros.common.view.SelectorFragment;
 import com.upvmaster.carlos.audiolibros.main.domain.GetLastBook;
 import com.upvmaster.carlos.audiolibros.main.domain.HasLastBook;
 import com.upvmaster.carlos.audiolibros.main.domain.SaveLastBook;
@@ -118,6 +124,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 presenter.clickFavoriteButton();
             }
         });
+        //TODO toca refactorizar!!
+        //Nombre de usuario
+        SharedPreferences pref = getSharedPreferences(
+                "com.example.audiolibros_internal", MODE_PRIVATE);
+        String name = pref.getString("name", null);
+        View headerLayout = navigationView.getHeaderView(0);
+        TextView txtName = (TextView) headerLayout.findViewById(R.id.txtName);
+        txtName.setText(String.format(getString(R.string.welcome_message), name));
 
     }
 
@@ -191,6 +205,24 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             adaptador.notifyDataSetChanged();
         } else if (id == R.id.nav_preferencias) {
             lanzarPreferencias();
+        }  else if (id == R.id.nav_signout) {
+            AuthUI.getInstance().signOut(this)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            SharedPreferences pref = getSharedPreferences(
+                                    "com.example.audiolibros_internal", MODE_PRIVATE);
+                            pref.edit().remove("provider").commit();
+                            pref.edit().remove("email").commit();
+                            pref.edit().remove("name").commit();
+                            Intent i = new Intent(MainActivity.this,LoginActivity.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
+                                    | Intent.FLAG_ACTIVITY_NEW_TASK
+                                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(i);
+                            finish();
+                        }
+                    });
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
