@@ -16,6 +16,8 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.NetworkImageView;
 import com.upvmaster.carlos.audiolibros.R;
+import com.upvmaster.carlos.audiolibros.main.data.BooksRepository;
+import com.upvmaster.carlos.audiolibros.main.data.datasources.LibroSharedPrefenceStorage;
 import com.upvmaster.carlos.audiolibros.main.view.MainActivity;
 import com.upvmaster.carlos.audiolibros.main.data.datasources.Libro;
 import com.upvmaster.carlos.audiolibros.main.data.datasources.LibrosSingleton;
@@ -29,7 +31,7 @@ import android.os.Handler;
  * Created by carlos.cupeiro on 22/12/2016.
  */
 
-public class DetalleFragment extends Fragment implements View.OnTouchListener, MediaPlayer.OnPreparedListener, MediaController.MediaPlayerControl {
+public class DetalleFragment extends Fragment implements View.OnTouchListener, MediaPlayer.OnPreparedListener, MediaController.MediaPlayerControl,DetallePresenter.View {
     public static String ARG_ID_LIBRO = "id_libro";
     MediaPlayer mediaPlayer;
     MediaController mediaController;
@@ -52,14 +54,13 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
     @Override
     public View onCreateView(LayoutInflater inflador, ViewGroup contenedor, Bundle savedInstanceState) {
         View vista = inflador.inflate(R.layout.fragment_detalle, contenedor, false);
-
         Bundle args = getArguments();
+        int id=0;
         if (args != null) {
-            int position = args.getInt(ARG_ID_LIBRO);
-            ponInfoLibro(position, vista);
-        } else {
-            ponInfoLibro(0, vista);
+            id = args.getInt(ARG_ID_LIBRO);
         }
+        presenter = new DetallePresenter(id,vista.getContext(),this);
+        ponInfoLibro(id,vista);
         //Poner aquí los cambios en ZoomSeekBar
         zoombar = (ZoomSeekBar) vista.findViewById(R.id.zoombar);
         zoombar.setVisibility(View.INVISIBLE);
@@ -215,5 +216,15 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
     @Override
     public int getAudioSessionId() {
         return 0;
+    }
+
+    @Override
+    public void ponInfoLibro(Libro book) {
+        //TODO
+    }
+
+    @Override
+    public void updateZoomSeekBar() {
+    //TODO
     }
 }
