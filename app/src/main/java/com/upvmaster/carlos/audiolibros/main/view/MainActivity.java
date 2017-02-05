@@ -1,6 +1,7 @@
 package com.upvmaster.carlos.audiolibros.main.view;
 
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -38,7 +39,7 @@ import com.upvmaster.carlos.audiolibros.main.domain.HasLastBook;
 import com.upvmaster.carlos.audiolibros.main.domain.SaveLastBook;
 
 
-public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,MainPresenter.View {
+public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MainPresenter.View {
 
     private AdaptadorLibrosFiltro adaptador;
     private MainPresenter presenter;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BooksRepository booksRepository  = new BooksRepository(LibroSharedPrefenceStorage.getInstance(this));
+        BooksRepository booksRepository = new BooksRepository(LibroSharedPrefenceStorage.getInstance(this));
         presenter = new MainPresenter(new SaveLastBook(booksRepository),
                 new GetLastBook(booksRepository),
                 new HasLastBook(booksRepository),
@@ -124,14 +125,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 presenter.clickFavoriteButton();
             }
         });
-        //TODO toca refactorizar!!
         //Nombre de usuario
-        SharedPreferences pref = getSharedPreferences(
-                "com.example.audiolibros_internal", MODE_PRIVATE);
-        String name = pref.getString("name", null);
         View headerLayout = navigationView.getHeaderView(0);
         TextView txtName = (TextView) headerLayout.findViewById(R.id.txtName);
-        txtName.setText(String.format(getString(R.string.welcome_message), name));
+        txtName.setText(String.format(getString(R.string.welcome_message), presenter.getNameUser(this)));
 
     }
 
@@ -157,12 +154,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     public void mostrarDetalle(int id) {
-       presenter.openDetalle(id);
+        presenter.openDetalle(id);
     }
 
     @Override
     public void mostrarNoUltimaVisita() {
-        Toast.makeText(this, "Sin última vista",Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "Sin última vista", Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void logout() {
+        Intent i = new Intent(MainActivity.this, LoginActivity.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
+        finish();
     }
 
     @Override
@@ -205,24 +210,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             adaptador.notifyDataSetChanged();
         } else if (id == R.id.nav_preferencias) {
             lanzarPreferencias();
-        }  else if (id == R.id.nav_signout) {
-            AuthUI.getInstance().signOut(this)
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            SharedPreferences pref = getSharedPreferences(
-                                    "com.example.audiolibros_internal", MODE_PRIVATE);
-                            pref.edit().remove("provider").commit();
-                            pref.edit().remove("email").commit();
-                            pref.edit().remove("name").commit();
-                            Intent i = new Intent(MainActivity.this,LoginActivity.class);
-                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
-                                    | Intent.FLAG_ACTIVITY_NEW_TASK
-                                    | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                            startActivity(i);
-                            finish();
-                        }
-                    });
+        } else if (id == R.id.nav_signout) {
+            presenter.logout(this);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -258,4 +247,5 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         }
     }
+
 }

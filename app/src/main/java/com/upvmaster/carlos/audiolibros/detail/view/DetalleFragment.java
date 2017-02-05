@@ -2,6 +2,7 @@ package com.upvmaster.carlos.audiolibros.detail.view;
 
 import android.app.Fragment;
 import android.content.SharedPreferences;
+import android.media.MediaDataSource;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,77 +34,35 @@ import android.os.Handler;
 
 public class DetalleFragment extends Fragment implements View.OnTouchListener, MediaPlayer.OnPreparedListener, MediaController.MediaPlayerControl,DetallePresenter.View {
     public static String ARG_ID_LIBRO = "id_libro";
-    MediaPlayer mediaPlayer;
-    MediaController mediaController;
+    private MediaController mediaController;
+    private View vista;
     private DetallePresenter presenter;
     private ZoomSeekBar zoombar;
-    private Handler mHandler;
-    private Runnable run_tiempo = new Runnable() {
-
-        @Override
-        public void run() {
-            if(mediaPlayer != null){
-                int mCurrentPosition = mediaPlayer.getCurrentPosition() / 1000;
-                zoombar.setVal(mCurrentPosition);
-            }
-            mHandler.postDelayed(this, 1000);
-        }
-    };
 
 
     @Override
     public View onCreateView(LayoutInflater inflador, ViewGroup contenedor, Bundle savedInstanceState) {
-        View vista = inflador.inflate(R.layout.fragment_detalle, contenedor, false);
+        vista = inflador.inflate(R.layout.fragment_detalle, contenedor, false);
         Bundle args = getArguments();
         int id=0;
         if (args != null) {
             id = args.getInt(ARG_ID_LIBRO);
         }
-        presenter = new DetallePresenter(id,vista.getContext(),this);
-        ponInfoLibro(id,vista);
+        presenter = new DetallePresenter(vista.getContext(), this);
+        presenter.ponInfoLibro(id);
+        mediaController = new MediaController(getActivity());
         //Poner aquí los cambios en ZoomSeekBar
         zoombar = (ZoomSeekBar) vista.findViewById(R.id.zoombar);
         zoombar.setVisibility(View.INVISIBLE);
         //Probar con el seekTo para cambiar el zoomSeekBar
-        zoombar.setOnZoomSeekBarListener(new OnZoomSeekBarListener() {
-            @Override
-            public void colocarAudio(int posicion) {
-                if(mediaPlayer!=null)
-                    mediaPlayer.seekTo(posicion*1000);
-            }
-        });
-        mHandler = new Handler();
+        zoombar.setOnZoomSeekBarListener(presenter.getlistenerZoomBar());
         //Make sure you update Seekbar on UI thread
-        getActivity().runOnUiThread(run_tiempo);
-
-
+        getActivity().runOnUiThread(presenter.getRun_tiempo(zoombar));
         return vista;
     }
 
-    private void ponInfoLibro(int id, View vista) {
-        Libro libro = LibrosSingleton.getInstance(vista.getContext()).getListaLibros().get(id);
-        ((TextView) vista.findViewById(R.id.titulo)).setText(libro.titulo);
-        ((TextView) vista.findViewById(R.id.autor)).setText(libro.autor);
-        ((NetworkImageView) vista.findViewById(R.id.portada)).
-                setImageUrl(libro.urlImagen, VolleySingleton.getInstance(vista.getContext()).getLectorImagenes());
-        vista.setOnTouchListener(this);
-        if (mediaPlayer != null) {
-            mediaPlayer.release();
-        }
-        mediaPlayer = new MediaPlayer();
-        mediaPlayer.setOnPreparedListener(this);
-        mediaController = new MediaController(getActivity());
-        Uri audio = Uri.parse(libro.urlAudio);
-        try {
-            mediaPlayer.setDataSource(getActivity(), audio);
-            mediaPlayer.prepareAsync();
-        } catch (IOException e) {
-            Log.e("Audiolibros", "ERROR: No se puede reproducir " + audio, e);
-        }
-    }
-
     public void ponInfoLibro(int id) {
-        ponInfoLibro(id, getView());
+        presenter.ponInfoLibro(id);
     }
 
     @Override
@@ -148,14 +107,8 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
 
     @Override
     public void onStop() {
-        mHandler.removeCallbacks(run_tiempo);
         mediaController.hide();
-        try {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-        } catch (Exception e) {
-            Log.d("Audiolibros", "Error en mediaPlayer.stop()");
-        }
+        presenter.onStop();
         super.onStop();
     }
 
@@ -182,7 +135,7 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
     @Override
     public int getCurrentPosition() {
         try {
-            return mediaPlayer.getCurrentPosition();
+            return presenter.getCurrentPosition();
         } catch (Exception e) {
             return 0;
         }
@@ -190,27 +143,27 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
 
     @Override
     public int getDuration() {
-        return mediaPlayer.getDuration();
+        return presenter.getDuration();
     }
 
     @Override
     public boolean isPlaying() {
-        return mediaPlayer.isPlaying();
+        return presenter.audioIsPlaying();
     }
 
     @Override
     public void pause() {
-        mediaPlayer.pause();
+        presenter.pauseAudio();
     }
 
     @Override
     public void seekTo(int pos) {
-        mediaPlayer.seekTo(pos);
+        presenter.seekToAudio(pos);
     }
 
     @Override
     public void start() {
-        mediaPlayer.start();
+        presenter.startAudio();
     }
 
     @Override
@@ -220,11 +173,12 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
 
     @Override
     public void ponInfoLibro(Libro book) {
-        //TODO
-    }
-
-    @Override
-    public void updateZoomSeekBar() {
-    //TODO
+        ((TextView) vista.findViewById(R.id.titulo)).setText(book.titulo);
+        ((TextView) vista.findViewById(R.id.autor)).setText(book.autor);
+        ((NetworkImageView) vista.findViewById(R.id.portada)).
+                setImageUrl(book.urlImagen, VolleySingleton.getInstance(vista.getContext()).getLectorImagenes());
+        vista.setOnTouchListener(this);
+        Uri audio = Uri.parse(book.urlAudio);
+        presenter.initMediaPlayer(this,audio);
     }
 }

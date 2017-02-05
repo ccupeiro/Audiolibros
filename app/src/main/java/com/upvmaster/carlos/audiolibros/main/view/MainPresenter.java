@@ -1,5 +1,8 @@
 package com.upvmaster.carlos.audiolibros.main.view;
 
+import android.content.Context;
+
+import com.upvmaster.carlos.audiolibros.login.data.datasources.FirebaseStorageSharedPreferences;
 import com.upvmaster.carlos.audiolibros.main.domain.GetLastBook;
 import com.upvmaster.carlos.audiolibros.main.domain.HasLastBook;
 import com.upvmaster.carlos.audiolibros.main.domain.SaveLastBook;
@@ -29,6 +32,15 @@ public class MainPresenter {
         }
     }
 
+    public String getNameUser(Context context){
+        return FirebaseStorageSharedPreferences.getInstance(context).getNameUser();
+    }
+
+    public void logout(Context context){
+        FirebaseStorageSharedPreferences.getInstance(context).removeUser();
+        view.logout();
+    }
+
     public void openDetalle(int id) {
         saveLastBook.execute(id);
         view.mostrarFragmentDetalle(id);
@@ -37,5 +49,6 @@ public class MainPresenter {
     public interface View {
         void mostrarFragmentDetalle(int lastBook);
         void mostrarNoUltimaVisita();
+        void logout();
     }
 }

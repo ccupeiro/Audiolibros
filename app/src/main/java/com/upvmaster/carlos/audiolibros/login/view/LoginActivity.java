@@ -10,6 +10,9 @@ import com.firebase.ui.auth.ResultCodes;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.upvmaster.carlos.audiolibros.R;
+import com.upvmaster.carlos.audiolibros.login.data.datasources.FirebaseAuthSingleton;
+import com.upvmaster.carlos.audiolibros.login.data.datasources.FirebaseStorage;
+import com.upvmaster.carlos.audiolibros.login.data.datasources.FirebaseStorageSharedPreferences;
 import com.upvmaster.carlos.audiolibros.main.data.datasources.LibrosSingleton;
 import com.upvmaster.carlos.audiolibros.main.view.MainActivity;
 
@@ -17,15 +20,14 @@ import java.util.Arrays;
 
 /**
  * Created by carlos.cupeiro on 02/02/2017.
- */
-//TODO refactorizar toda esta clase
+ */s
 public class LoginActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 123;
     private FirebaseAuth auth;
     @Override protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        auth = LibrosSingleton.getInstance(this).getAuth();
+        auth = FirebaseAuthSingleton.getInstance().getAuth();
         doLogin();
     }
     private void doLogin() {
@@ -34,13 +36,7 @@ public class LoginActivity extends AppCompatActivity {
             String name = currentUser.getDisplayName();
             String email = currentUser.getEmail();
             String provider = currentUser.getProviders().get(0);
-            SharedPreferences pref = getSharedPreferences(
-                    "com.example.audiolibros_internal", MODE_PRIVATE);
-            pref.edit().putString("provider", provider).commit();
-            pref.edit().putString("name", name).commit();
-            if (email != null) {
-                pref.edit().putString("email", email).commit();
-            }
+            FirebaseStorageSharedPreferences.getInstance(this).saveUser(name,email,provider);
             Intent i = new Intent(this, MainActivity.class);
             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP
                     | Intent.FLAG_ACTIVITY_NEW_TASK

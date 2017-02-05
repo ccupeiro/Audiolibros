@@ -14,7 +14,6 @@ public class LibrosSingleton {
     private static LibrosSingleton instance;
     private List<Libro> listaLibros;
     private AdaptadorLibrosFiltro adaptadorLibros;
-    private FirebaseAuth auth;
 
     public static LibrosSingleton getInstance(Context context) {
         if(instance == null){
@@ -26,7 +25,6 @@ public class LibrosSingleton {
     private LibrosSingleton(Context context) {
         listaLibros = Libro.ejemploLibros();
         adaptadorLibros = new AdaptadorLibrosFiltro(context, listaLibros);
-        auth = FirebaseAuth.getInstance();
     }
 
     public List<Libro> getListaLibros() {
@@ -37,7 +35,4 @@ public class LibrosSingleton {
         return adaptadorLibros;
     }
 
-    public FirebaseAuth getAuth() {
-        return auth;
-    }
 }
