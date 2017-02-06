@@ -36,8 +36,8 @@ public class MiWidgetProvider extends AppWidgetProvider {
         RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.widget);
         if (id >= 0 && id < Libro.ejemploLibros().size()) {
             Libro libro = Libro.ejemploLibros().get(id);
-            remoteViews.setTextViewText(R.id.tv_titulo, libro.titulo);
-            remoteViews.setTextViewText(R.id.tv_autor, libro.autor);
+            remoteViews.setTextViewText(R.id.tv_titulo, libro.getTitulo());
+            remoteViews.setTextViewText(R.id.tv_autor, libro.getAutor());
         } else {
             remoteViews.setTextViewText(R.id.tv_titulo, "No hay último libro");
             remoteViews.setTextViewText(R.id.tv_autor, "");

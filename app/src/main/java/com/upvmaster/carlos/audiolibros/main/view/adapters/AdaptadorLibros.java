@@ -78,7 +78,7 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
             }
         });
         final Libro libro = listaLibros.get(posicion);
-        VolleySingleton.getInstance(contexto).getLectorImagenes().get(libro.urlImagen, new ImageLoader.ImageListener() {
+        VolleySingleton.getInstance(contexto).getLectorImagenes().get(libro.getUrlImagen(), new ImageLoader.ImageListener() {
                     @Override
                     public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                         Bitmap bitmap = response.getBitmap();
@@ -108,7 +108,7 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
                 }
 
         );
-        holder.titulo.setText(libro.titulo);
+        holder.titulo.setText(libro.getTitulo());
     }
 
     // Indicamos el número de elementos de la lista

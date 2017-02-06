@@ -37,6 +37,7 @@ import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.TwitterAuthProvider;
+import com.google.firebase.database.DatabaseReference;
 import com.twitter.sdk.android.Twitter;
 import com.twitter.sdk.android.core.Callback;
 import com.twitter.sdk.android.core.Result;
@@ -45,8 +46,10 @@ import com.twitter.sdk.android.core.TwitterException;
 import com.twitter.sdk.android.core.TwitterSession;
 import com.twitter.sdk.android.core.identity.TwitterLoginButton;
 import com.upvmaster.carlos.audiolibros.R;
+import com.upvmaster.carlos.audiolibros.common.data.datasources.FirebaseDatabaseSingleton;
 import com.upvmaster.carlos.audiolibros.login.data.datasources.FirebaseAuthSingleton;
 import com.upvmaster.carlos.audiolibros.login.data.datasources.FirebaseStorageSharedPreferences;
+import com.upvmaster.carlos.audiolibros.main.data.datasources.User;
 import com.upvmaster.carlos.audiolibros.main.view.MainActivity;
 
 import io.fabric.sdk.android.Fabric;
@@ -252,6 +255,7 @@ public class CustomLoginActivity extends FragmentActivity implements View.OnClic
     private void doLogin() {
         FirebaseUser currentUser = auth.getCurrentUser();
         if (currentUser != null) {
+            guardarUsuario(currentUser);
             String name = currentUser.getDisplayName();
             String email = currentUser.getEmail();
             String provider = currentUser.getProviders().get(0);
@@ -262,6 +266,12 @@ public class CustomLoginActivity extends FragmentActivity implements View.OnClic
             finish();
         }
     }
+
+    void guardarUsuario(final FirebaseUser user) {
+        DatabaseReference userReference = FirebaseDatabaseSingleton.getInstance().getUsersReference().child(user.getUid());
+        userReference.setValue(new User(user.getDisplayName(), user.getEmail()));
+    }
+
 
     public void signin(View v) {
         String email = inputEmail.getText().toString();

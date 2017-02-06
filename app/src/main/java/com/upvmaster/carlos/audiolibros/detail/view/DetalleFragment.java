@@ -173,12 +173,12 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
 
     @Override
     public void ponInfoLibro(Libro book) {
-        ((TextView) vista.findViewById(R.id.titulo)).setText(book.titulo);
-        ((TextView) vista.findViewById(R.id.autor)).setText(book.autor);
+        ((TextView) vista.findViewById(R.id.titulo)).setText(book.getTitulo());
+        ((TextView) vista.findViewById(R.id.autor)).setText(book.getAutor());
         ((NetworkImageView) vista.findViewById(R.id.portada)).
-                setImageUrl(book.urlImagen, VolleySingleton.getInstance(vista.getContext()).getLectorImagenes());
+                setImageUrl(book.getUrlImagen(), VolleySingleton.getInstance(vista.getContext()).getLectorImagenes());
         vista.setOnTouchListener(this);
-        Uri audio = Uri.parse(book.urlAudio);
+        Uri audio = Uri.parse(book.getUrlAudio());
         presenter.initMediaPlayer(this,audio);
     }
 }
