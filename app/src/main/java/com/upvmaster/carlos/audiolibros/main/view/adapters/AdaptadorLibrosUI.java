@@ -13,36 +13,29 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.google.firebase.database.ChildEventListener;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.upvmaster.carlos.audiolibros.main.data.datasources.Libro;
 import com.upvmaster.carlos.audiolibros.R;
+import com.upvmaster.carlos.audiolibros.main.data.datasources.Libro;
 import com.upvmaster.carlos.audiolibros.main.data.datasources.VolleySingleton;
 import com.upvmaster.carlos.audiolibros.main.view.events.ClickAction;
 import com.upvmaster.carlos.audiolibros.main.view.events.EmptyClickAction;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by Carlos on 21/12/2016.
  */
-public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHolder> implements ChildEventListener {
+public class AdaptadorLibrosUI extends FirebaseRecyclerAdapter<Libro,AdaptadorLibrosUI.ViewHolder> {
     private LayoutInflater inflador; //Crea Layouts a partir del XML protected
+    List<Libro> listaLibros; //Vector con libros a visualizar
     private Context contexto;
     private ClickAction clickAction = new EmptyClickAction();
     private ClickAction longClickAction = new EmptyClickAction();
     protected DatabaseReference booksReference;
 
-    private ArrayList<String> keys;
-    private ArrayList<DataSnapshot> items;
-
-    public AdaptadorLibros(Context contexto, DatabaseReference reference) {
+    public AdaptadorLibrosUI(Context contexto, DatabaseReference reference) {
+        super(Libro.class, R.layout.elemento_selector, AdaptadorLibrosUI.ViewHolder.class, reference);
         inflador = (LayoutInflater) contexto.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        keys = new ArrayList<String>();
-        items = new ArrayList<DataSnapshot>();
         this.booksReference = reference;
         this.contexto = contexto;
     } //Creamos nuestro ViewHolder, con los tipos de elementos a modificar
@@ -74,8 +67,7 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
 
     // Usando como base el ViewHolder y lo personalizamos
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int posicion) {
-        final Libro libro = getItem(posicion);
+    public void populateViewHolder(final ViewHolder holder,final Libro libro, final int posicion) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,64 +114,6 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
         holder.titulo.setText(libro.getTitulo());
     }
 
-    @Override
-    public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-        items.add(dataSnapshot);
-        keys.add(dataSnapshot.getKey());
-        notifyItemInserted(getItemCount() - 1);
-    }
-
-    @Override
-    public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-        String key = dataSnapshot.getKey();
-        int index = keys.indexOf(key);
-        if (index != -1) {
-            items.set(index, dataSnapshot);
-            notifyItemChanged(index, dataSnapshot.getValue(Libro.class));
-        }
-    }
-
-    @Override
-    public void onChildRemoved(DataSnapshot dataSnapshot) {
-        String key = dataSnapshot.getKey();
-        int index = keys.indexOf(key);
-        if (index != -1) {
-            keys.remove(index);
-            items.remove(index);
-            notifyItemRemoved(index);
-        }
-    }
-
-    @Override
-    public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-    }
-
-    @Override
-    public void onCancelled(DatabaseError databaseError) {
-    }
-
-    @Override
-    public int getItemCount() {
-        return items.size();
-    }
-
-    public DatabaseReference getRef(int pos) {
-        return items.get(pos).getRef();
-    }
-
-    public Libro getItem(int pos) {
-        return items.get(pos).getValue(Libro.class);
-    }
-
-    public void activaEscuchadorLibros() {
-        keys = new ArrayList<String>();
-        items = new ArrayList<DataSnapshot>();
-        booksReference.addChildEventListener(this);
-    }
-
-    public void desactivaEscuchadorLibros() {
-        booksReference.removeEventListener(this);
-    }
     // Indicamos el número de elementos de la lista
   /*  @Override
     public int getItemCount() {

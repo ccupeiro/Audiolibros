@@ -46,7 +46,14 @@ public class SelectorFragment extends Fragment {
     @Override
     public void onResume() {
         ((MainActivity) getActivity()).mostrarElementos(true);
+        adaptador.activaEscuchadorLibros();
         super.onResume();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        adaptador.desactivaEscuchadorLibros();
     }
 
     @Override
@@ -56,8 +63,8 @@ public class SelectorFragment extends Fragment {
         recyclerView = (RecyclerView) vista.findViewById(R.id.recycler_view);
         recyclerView.setLayoutManager(new GridLayoutManager(actividad, 2));
         recyclerView.setAdapter(adaptador);
-        adaptador.setClickAction(new OpenDetailClickAction((MainActivity)getActivity()));
-        adaptador.setLongClickAction(new OpenMenuActionsClickAction((MainActivity)getActivity(),vista));
+        adaptador.setClickAction(new OpenDetailClickAction((MainActivity) getActivity()));
+        adaptador.setLongClickAction(new OpenMenuActionsClickAction((MainActivity) getActivity(), vista));
         DefaultItemAnimator animator = new DefaultItemAnimator();
         animator.setAddDuration(500);
         animator.setMoveDuration(500);
