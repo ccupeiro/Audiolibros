@@ -1,8 +1,21 @@
 package com.upvmaster.carlos.audiolibros.main.view;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.net.Uri;
+import android.support.annotation.NonNull;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.upvmaster.carlos.audiolibros.login.data.datasources.FirebaseAuthSingleton;
 import com.upvmaster.carlos.audiolibros.login.data.datasources.FirebaseStorageSharedPreferences;
+import com.upvmaster.carlos.audiolibros.login.view.CustomLoginActivity;
+import com.upvmaster.carlos.audiolibros.login.view.LoginActivity;
+import com.upvmaster.carlos.audiolibros.main.data.datasources.VolleySingleton;
 import com.upvmaster.carlos.audiolibros.main.domain.GetLastBook;
 import com.upvmaster.carlos.audiolibros.main.domain.HasLastBook;
 import com.upvmaster.carlos.audiolibros.main.domain.SaveLastBook;
@@ -36,9 +49,18 @@ public class MainPresenter {
         return FirebaseStorageSharedPreferences.getInstance(context).getNameUser();
     }
 
-    public void logout(Context context){
-        FirebaseStorageSharedPreferences.getInstance(context).removeUser();
-        view.logout();
+    public void logout(final Activity activity){
+        AuthUI.getInstance().signOut(activity).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                FirebaseStorageSharedPreferences.getInstance(activity).removeUser();
+                Intent i = new Intent(activity, CustomLoginActivity.class);
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                activity.startActivity(i);
+                activity.finish();
+            }
+        });
+
     }
 
     public void openDetalle(int id) {
@@ -46,9 +68,15 @@ public class MainPresenter {
         view.mostrarFragmentDetalle(id);
     }
 
+    public void colocarImagen(Context context){
+        Uri url = FirebaseAuthSingleton.getInstance().getPhotoCurrentUser();
+        view.mostrarImagenUser(url, VolleySingleton.getInstance(context).getLectorImagenes());
+
+    }
+
     public interface View {
         void mostrarFragmentDetalle(int lastBook);
         void mostrarNoUltimaVisita();
-        void logout();
+        void mostrarImagenUser(Uri url, ImageLoader loader);
     }
 }

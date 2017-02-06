@@ -1,6 +1,9 @@
 package com.upvmaster.carlos.audiolibros.login.data.datasources;
 
+import android.net.Uri;
+
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 /**
  * Created by Carlos on 05/02/2017.
@@ -22,5 +25,11 @@ public class FirebaseAuthSingleton {
 
     public FirebaseAuth getAuth() {
         return auth;
+    }
+    public FirebaseUser getCurrentUser(){
+        return auth.getCurrentUser();
+    }
+    public Uri getPhotoCurrentUser(){
+        return getCurrentUser().getPhotoUrl();
     }
 }

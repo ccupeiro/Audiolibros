@@ -4,6 +4,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -22,6 +23,8 @@ import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.toolbox.ImageLoader;
+import com.android.volley.toolbox.NetworkImageView;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -48,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private TabLayout tabs;
     private DrawerLayout drawer;
     private ActionBarDrawerToggle toggle;
+    private View headerLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -126,10 +130,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
         //Nombre de usuario
-        View headerLayout = navigationView.getHeaderView(0);
+        headerLayout = navigationView.getHeaderView(0);
         TextView txtName = (TextView) headerLayout.findViewById(R.id.txtName);
         txtName.setText(String.format(getString(R.string.welcome_message), presenter.getNameUser(this)));
-
+        presenter.colocarImagen(this);
     }
 
     @Override
@@ -163,11 +167,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void logout() {
-        Intent i = new Intent(MainActivity.this, LoginActivity.class);
-        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(i);
-        finish();
+    public void mostrarImagenUser(Uri url, ImageLoader loader) {
+        if(url!=null){
+            NetworkImageView fotoUser = (NetworkImageView) headerLayout.findViewById(R.id.imageView);
+            fotoUser.setImageUrl(url.toString(),loader);
+        }
     }
 
     @Override

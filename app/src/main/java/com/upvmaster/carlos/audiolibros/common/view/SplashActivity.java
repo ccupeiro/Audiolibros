@@ -7,6 +7,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 
+import com.upvmaster.carlos.audiolibros.login.view.CustomLoginActivity;
 import com.upvmaster.carlos.audiolibros.login.view.LoginActivity;
 import com.upvmaster.carlos.audiolibros.main.view.MainActivity;
 import com.upvmaster.carlos.audiolibros.R;
@@ -30,7 +31,7 @@ public class SplashActivity extends AppCompatActivity implements Animation.Anima
 
     @Override
     public void onAnimationEnd(Animation animation) {
-        Intent i = new Intent(this, LoginActivity.class);
+        Intent i = new Intent(this, CustomLoginActivity.class);
         startActivity(i);
         overridePendingTransition(R.anim.entrada_zoom, R.anim.salida_zoom);
     }

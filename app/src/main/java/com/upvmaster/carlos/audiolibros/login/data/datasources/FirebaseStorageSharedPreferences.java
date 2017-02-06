@@ -33,9 +33,12 @@ public class FirebaseStorageSharedPreferences implements FirebaseStorage {
     public void saveUser(String name, String email, String provider) {
         SharedPreferences pref = getPreference();
         pref.edit().putString(KEY_PROVIDER, provider).commit();
-        pref.edit().putString(KEY_NAME, name).commit();
+        if (name == null) {
+            name = email;
+        }
+        pref.edit().putString("name", name).commit();
         if (email != null) {
-            pref.edit().putString(KEY_EMAIL, email).commit();
+            pref.edit().putString("email", email).commit();
         }
     }
 
