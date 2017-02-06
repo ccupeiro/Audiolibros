@@ -39,7 +39,7 @@ public class OpenMenuActionsClickAction implements ClickAction{
                         anim.addListener(new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animator) {
-                                Libro libro =  LibrosSingleton.getInstance(view.getContext()).getListaLibros().get(position);
+                                Libro libro =  LibrosSingleton.getInstance(view.getContext()).getAdaptadorLibros().getItem(position);
                                 Intent i = new Intent(Intent.ACTION_SEND);
                                 i.setType("text/plain");
                                 i.putExtra(Intent.EXTRA_SUBJECT, libro.getTitulo());

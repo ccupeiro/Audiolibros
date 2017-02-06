@@ -45,8 +45,8 @@ public class DetallePresenter {
     }
 
     public void ponInfoLibro(int id) {
-        this.book = LibrosSingleton.getInstance(context).getListaLibros().get(id);
-        view.ponInfoLibro(LibrosSingleton.getInstance(context).getListaLibros().get(id));
+        this.book = LibrosSingleton.getInstance(context).getAdaptadorLibros().getItemById(id);
+        view.ponInfoLibro(book);
     }
 
     public void onStop(){

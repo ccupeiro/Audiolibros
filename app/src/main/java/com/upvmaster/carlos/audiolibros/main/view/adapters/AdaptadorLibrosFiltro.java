@@ -2,6 +2,7 @@ package com.upvmaster.carlos.audiolibros.main.view.adapters;
 
 import android.content.Context;
 
+import com.google.firebase.database.DatabaseReference;
 import com.upvmaster.carlos.audiolibros.main.data.datasources.Libro;
 
 import java.util.ArrayList;
@@ -14,16 +15,15 @@ import java.util.Observer;
  */
 
 public class AdaptadorLibrosFiltro extends AdaptadorLibros implements Observer {
-    private List<Libro> listaSinFiltros;// Vector con todos los libros
     private List<Integer> indiceFiltro; // Índice en listaSinFiltros de Cada elemento de vectorLibros
+    private int librosUltimoFiltro; //Número libros del padre en último filtro
     private String busqueda = ""; // Búsqueda sobre autor o título
     private String genero = ""; // Género seleccionado
     private boolean novedad = false; // Si queremos ver solo novedades
     private boolean leido = false; // Si queremos ver solo leidos
 
-    public AdaptadorLibrosFiltro(Context contexto, List<Libro> vectorLibros) {
-        super(contexto, vectorLibros);
-        listaSinFiltros = vectorLibros;
+    public AdaptadorLibrosFiltro(Context contexto, DatabaseReference reference) {
+        super(contexto, reference);
         recalculaFiltro();
     }
 
@@ -48,35 +48,45 @@ public class AdaptadorLibrosFiltro extends AdaptadorLibros implements Observer {
     }
 
     public void recalculaFiltro() {
-        listaLibros = new ArrayList<Libro>();
         indiceFiltro = new ArrayList<>();
-        for (int i = 0; i < listaSinFiltros.size(); i++) {
-            Libro libro = listaSinFiltros.get(i);
+        librosUltimoFiltro = super.getItemCount();
+        for (int i = 0; i < librosUltimoFiltro; i++) {
+            Libro libro = super.getItem(i);
             if ((libro.getTitulo().toLowerCase().contains(busqueda) || libro.getAutor().toLowerCase().contains(busqueda))
                     && (libro.getGenero().startsWith(genero))
                     && (!novedad || (novedad && libro.getNovedad()))
                     && (!leido || (leido /*&& libro.getLeido()*/))) {
-                listaLibros.add(libro);
                 indiceFiltro.add(i);
             }
         }
     }
 
     public Libro getItem(int posicion) {
-        return listaSinFiltros.get(indiceFiltro.get(posicion));
+        if (librosUltimoFiltro != super.getItemCount()) {
+            recalculaFiltro();
+        }
+        return super.getItem(indiceFiltro.get(posicion));
     }
 
     public long getItemId(int posicion) {
-        return indiceFiltro.get(posicion);
+        if (librosUltimoFiltro != super.getItemCount()) {
+            recalculaFiltro();
+        }
+        return indiceFiltro.size();
+    }
+
+    public Libro getItemById(int id) {
+        return super.getItem(id);
     }
 
     public void borrar(int posicion) {
-        listaSinFiltros.remove((int) getItemId(posicion));
+        DatabaseReference referencia = getRef(indiceFiltro.get(posicion));
+        referencia.removeValue();
         recalculaFiltro();
     }
 
     public void insertar(Libro libro) {
-        listaSinFiltros.add(0, libro);
+        booksReference.push().setValue(libro);
         recalculaFiltro();
     }
 

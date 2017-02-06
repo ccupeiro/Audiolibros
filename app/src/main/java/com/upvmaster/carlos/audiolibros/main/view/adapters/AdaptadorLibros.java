@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DatabaseReference;
 import com.upvmaster.carlos.audiolibros.main.data.datasources.Libro;
 import com.upvmaster.carlos.audiolibros.R;
 import com.upvmaster.carlos.audiolibros.main.data.datasources.VolleySingleton;
@@ -23,16 +25,18 @@ import java.util.List;
 /**
  * Created by Carlos on 21/12/2016.
  */
-public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHolder> {
+public class AdaptadorLibros extends FirebaseRecyclerAdapter<Libro,AdaptadorLibros.ViewHolder> {
     private LayoutInflater inflador; //Crea Layouts a partir del XML protected
     List<Libro> listaLibros; //Vector con libros a visualizar
     private Context contexto;
     private ClickAction clickAction = new EmptyClickAction();
     private ClickAction longClickAction = new EmptyClickAction();
+    protected DatabaseReference booksReference;
 
-    public AdaptadorLibros(Context contexto, List<Libro> listaLibros) {
+    public AdaptadorLibros(Context contexto, DatabaseReference reference) {
+        super(Libro.class, R.layout.elemento_selector, AdaptadorLibros.ViewHolder.class, reference);
         inflador = (LayoutInflater) contexto.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        this.listaLibros = listaLibros;
+        this.booksReference = reference;
         this.contexto = contexto;
     } //Creamos nuestro ViewHolder, con los tipos de elementos a modificar
 
@@ -63,7 +67,7 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
 
     // Usando como base el ViewHolder y lo personalizamos
     @Override
-    public void onBindViewHolder(final ViewHolder holder, final int posicion) {
+    public void populateViewHolder(final ViewHolder holder,final Libro libro, final int posicion) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +81,6 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
                 return true;
             }
         });
-        final Libro libro = listaLibros.get(posicion);
         VolleySingleton.getInstance(contexto).getLectorImagenes().get(libro.getUrlImagen(), new ImageLoader.ImageListener() {
                     @Override
                     public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
@@ -112,9 +115,9 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
     }
 
     // Indicamos el número de elementos de la lista
-    @Override
+  /*  @Override
     public int getItemCount() {
         return listaLibros.size();
-    }
+    }*/
 
 }

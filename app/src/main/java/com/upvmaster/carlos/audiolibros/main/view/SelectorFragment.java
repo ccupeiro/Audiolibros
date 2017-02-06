@@ -34,14 +34,12 @@ public class SelectorFragment extends Fragment {
     private Activity actividad;
     private RecyclerView recyclerView;
     private AdaptadorLibrosFiltro adaptador;
-    private List<Libro> listaLibros;
 
     @Override
     public void onAttach(Activity actividad) {
         super.onAttach(actividad);
         this.actividad = actividad;
         adaptador = LibrosSingleton.getInstance(actividad).getAdaptadorLibros();
-        listaLibros = LibrosSingleton.getInstance(actividad).getListaLibros();
 
     }
 

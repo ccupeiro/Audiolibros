@@ -3,6 +3,7 @@ package com.upvmaster.carlos.audiolibros.main.data.datasources;
 import android.content.Context;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.upvmaster.carlos.audiolibros.common.data.datasources.FirebaseDatabaseSingleton;
 import com.upvmaster.carlos.audiolibros.main.view.adapters.AdaptadorLibrosFiltro;
 
 import java.util.List;
@@ -12,7 +13,6 @@ import java.util.List;
  */
 public class LibrosSingleton {
     private static LibrosSingleton instance;
-    private List<Libro> listaLibros;
     private AdaptadorLibrosFiltro adaptadorLibros;
 
     public static LibrosSingleton getInstance(Context context) {
@@ -23,12 +23,7 @@ public class LibrosSingleton {
     }
 
     private LibrosSingleton(Context context) {
-        listaLibros = Libro.ejemploLibros();
-        adaptadorLibros = new AdaptadorLibrosFiltro(context, listaLibros);
-    }
-
-    public List<Libro> getListaLibros() {
-        return listaLibros;
+        adaptadorLibros = new AdaptadorLibrosFiltro(context, FirebaseDatabaseSingleton.getInstance().getBooksReference());
     }
 
     public AdaptadorLibrosFiltro getAdaptadorLibros() {
