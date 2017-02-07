@@ -20,6 +20,8 @@ import com.upvmaster.carlos.audiolibros.main.domain.GetLastBook;
 import com.upvmaster.carlos.audiolibros.main.domain.HasLastBook;
 import com.upvmaster.carlos.audiolibros.main.domain.SaveLastBook;
 
+import static android.R.attr.id;
+
 /**
  * Created by Carlos on 25/01/2017.
  */
@@ -63,9 +65,9 @@ public class MainPresenter {
 
     }
 
-    public void openDetalle(int id) {
-        saveLastBook.execute(id);
-        view.mostrarFragmentDetalle(id);
+    public void openDetalle(String key) {
+        saveLastBook.execute(key);
+        view.mostrarFragmentDetalle(key);
     }
 
     public void colocarImagen(Context context){
@@ -75,7 +77,7 @@ public class MainPresenter {
     }
 
     public interface View {
-        void mostrarFragmentDetalle(int lastBook);
+        void mostrarFragmentDetalle(String key);
         void mostrarNoUltimaVisita();
         void mostrarImagenUser(Uri url, ImageLoader loader);
     }

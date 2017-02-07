@@ -14,6 +14,8 @@ import com.upvmaster.carlos.audiolibros.main.data.datasources.LibrosSingleton;
 
 import java.io.IOException;
 
+import static android.R.attr.id;
+
 /**
  * Created by Carlos on 25/01/2017.
  */
@@ -44,8 +46,8 @@ public class DetallePresenter {
         };
     }
 
-    public void ponInfoLibro(int id) {
-        this.book = LibrosSingleton.getInstance(context).getAdaptadorLibros().getItemById(id);
+    public void ponInfoLibro(String key) {
+        this.book = LibrosSingleton.getInstance(context).getAdaptadorLibros().getItemByKey(key);
         view.ponInfoLibro(book);
     }
 

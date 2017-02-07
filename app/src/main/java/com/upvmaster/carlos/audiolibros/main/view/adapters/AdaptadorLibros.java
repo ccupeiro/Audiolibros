@@ -17,6 +17,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.upvmaster.carlos.audiolibros.common.data.datasources.FirebaseDatabaseSingleton;
 import com.upvmaster.carlos.audiolibros.main.data.datasources.Libro;
 import com.upvmaster.carlos.audiolibros.R;
 import com.upvmaster.carlos.audiolibros.main.data.datasources.VolleySingleton;
@@ -45,6 +46,7 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
         items = new ArrayList<DataSnapshot>();
         this.booksReference = reference;
         this.contexto = contexto;
+        this.booksReference.addChildEventListener(this);
     } //Creamos nuestro ViewHolder, con los tipos de elementos a modificar
 
     public void setClickAction(ClickAction clickAction) {
@@ -171,14 +173,29 @@ public class AdaptadorLibros extends RecyclerView.Adapter<AdaptadorLibros.ViewHo
         return items.get(pos).getValue(Libro.class);
     }
 
+    public String getItemKey(int pos) {
+        return keys.get(pos);
+    }
+
+    public Libro getItemByKey(String key) {
+        int index = keys.indexOf(key);
+        if (index != -1) {
+            return items.get(index).getValue(Libro.class);
+        } else {
+            return null;
+        }
+    }
+
     public void activaEscuchadorLibros() {
-        keys = new ArrayList<String>();
+        /*keys = new ArrayList<String>();
         items = new ArrayList<DataSnapshot>();
-        booksReference.addChildEventListener(this);
+        booksReference.addChildEventListener(this);*/
+        FirebaseDatabaseSingleton.getInstance().getDatabase().goOnline();
     }
 
     public void desactivaEscuchadorLibros() {
-        booksReference.removeEventListener(this);
+        //booksReference.removeEventListener(this);
+        FirebaseDatabaseSingleton.getInstance().getDatabase().goOffline();
     }
     // Indicamos el número de elementos de la lista
   /*  @Override

@@ -79,6 +79,14 @@ public class AdaptadorLibrosFiltro extends AdaptadorLibros implements Observer {
         return super.getItem(id);
     }
 
+    public String getItemKey(int posicion) {
+        if (librosUltimoFiltro != super.getItemCount()) {
+            recalculaFiltro();
+        }
+        int id = indiceFiltro.get(posicion);
+        return super.getItemKey(id);
+    }
+
     public void borrar(int posicion) {
         DatabaseReference referencia = getRef(indiceFiltro.get(posicion));
         referencia.removeValue();

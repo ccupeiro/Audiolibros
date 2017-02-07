@@ -2,6 +2,8 @@ package com.upvmaster.carlos.audiolibros.main.domain;
 
 import com.upvmaster.carlos.audiolibros.main.data.BooksRepository;
 
+import static android.R.attr.id;
+
 /**
  * Created by Carlos on 01/02/2017.
  */
@@ -13,7 +15,7 @@ public class SaveLastBook {
         this.booksRepository = booksRepository;
     }
 
-    public void execute(int id) {
-        booksRepository.saveLastBook(id);
+    public void execute(String key) {
+        booksRepository.saveLastBook(key);
     }
 }

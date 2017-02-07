@@ -41,6 +41,8 @@ import com.upvmaster.carlos.audiolibros.main.domain.GetLastBook;
 import com.upvmaster.carlos.audiolibros.main.domain.HasLastBook;
 import com.upvmaster.carlos.audiolibros.main.domain.SaveLastBook;
 
+import static android.R.attr.id;
+
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener, MainPresenter.View {
 
@@ -158,7 +160,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
     public void mostrarDetalle(int id) {
-        presenter.openDetalle(id);
+        String key = adaptador.getItemKey(id);
+        presenter.openDetalle(key);
     }
 
     @Override
@@ -175,14 +178,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void mostrarFragmentDetalle(int id) {
+    public void mostrarFragmentDetalle(String key) {
         DetalleFragment detalleFragment = (DetalleFragment) getFragmentManager().findFragmentById(R.id.detalle_fragment);
         if (detalleFragment != null) {
-            detalleFragment.ponInfoLibro(id);
+            detalleFragment.ponInfoLibro(key);
         } else {
             DetalleFragment nuevoFragment = new DetalleFragment();
             Bundle args = new Bundle();
-            args.putInt(DetalleFragment.ARG_ID_LIBRO, id);
+            args.putString(DetalleFragment.ARG_ID_LIBRO, key);
             nuevoFragment.setArguments(args);
             FragmentTransaction transaccion = getFragmentManager()
                     .beginTransaction();

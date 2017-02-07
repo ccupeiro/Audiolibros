@@ -6,6 +6,6 @@ package com.upvmaster.carlos.audiolibros.main.data.datasources;
 
 public interface LibroStorage {
     boolean hasLastBook();
-    int getLastBook();
-    void saveLastBook(int id);
+    String getLastBook();
+    void saveLastBook(String key);
 }

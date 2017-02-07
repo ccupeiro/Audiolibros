@@ -34,12 +34,12 @@ public class LibroSharedPrefenceStorage implements LibroStorage {
         return context.getSharedPreferences(PREF_AUDIOLIBROS, Context.MODE_PRIVATE);
     }
 
-    public int getLastBook() {
-        return getPreference().getInt(KEY_ULTIMO_LIBRO, -1);
+    public String getLastBook() {
+        return getPreference().getString(KEY_ULTIMO_LIBRO, "");
     }
 
-    public void saveLastBook(int id) {
-        getPreference().edit().putInt(KEY_ULTIMO_LIBRO,id).commit();
+    public void saveLastBook(String key) {
+        getPreference().edit().putString(KEY_ULTIMO_LIBRO,key).commit();
     }
 
 }

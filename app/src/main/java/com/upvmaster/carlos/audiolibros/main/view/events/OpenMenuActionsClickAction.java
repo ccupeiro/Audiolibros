@@ -28,6 +28,7 @@ public class OpenMenuActionsClickAction implements ClickAction{
 
     @Override
     public void execute(final int position) {
+        final String key  = LibrosSingleton.getInstance(view.getContext()).getAdaptadorLibros().getItemKey(position);
         AlertDialog.Builder menu = new AlertDialog.Builder(mainActivity);
         CharSequence[] opciones = {"Compartir", "Borrar ", "Insertar"};
         menu.setItems(opciones, new DialogInterface.OnClickListener() {
@@ -39,7 +40,8 @@ public class OpenMenuActionsClickAction implements ClickAction{
                         anim.addListener(new Animator.AnimatorListener() {
                             @Override
                             public void onAnimationStart(Animator animator) {
-                                Libro libro =  LibrosSingleton.getInstance(view.getContext()).getAdaptadorLibros().getItem(position);
+
+                                Libro libro =  LibrosSingleton.getInstance(view.getContext()).getAdaptadorLibros().getItemByKey(key);
                                 Intent i = new Intent(Intent.ACTION_SEND);
                                 i.setType("text/plain");
                                 i.putExtra(Intent.EXTRA_SUBJECT, libro.getTitulo());
@@ -76,7 +78,7 @@ public class OpenMenuActionsClickAction implements ClickAction{
                         break;
                     case 2: //Insertar
                         LibrosSingleton.getInstance(view.getContext()).getAdaptadorLibros().insertar(
-                                LibrosSingleton.getInstance(view.getContext()).getAdaptadorLibros().getItem(position));
+                                LibrosSingleton.getInstance(view.getContext()).getAdaptadorLibros().getItemByKey(key));
                         //adaptador.notifyDataSetChanged();
                         LibrosSingleton.getInstance(view.getContext()).getAdaptadorLibros().notifyItemInserted(0);
                         Snackbar.make(view, "Libro insertado", Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {

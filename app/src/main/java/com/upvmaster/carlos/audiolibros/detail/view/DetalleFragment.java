@@ -28,6 +28,8 @@ import java.io.IOException;
 
 import android.os.Handler;
 
+import static android.R.attr.id;
+
 /**
  * Created by carlos.cupeiro on 22/12/2016.
  */
@@ -44,12 +46,12 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
     public View onCreateView(LayoutInflater inflador, ViewGroup contenedor, Bundle savedInstanceState) {
         vista = inflador.inflate(R.layout.fragment_detalle, contenedor, false);
         Bundle args = getArguments();
-        int id=0;
+        String key="";
         if (args != null) {
-            id = args.getInt(ARG_ID_LIBRO);
+            key = args.getString(ARG_ID_LIBRO);
         }
         presenter = new DetallePresenter(vista.getContext(), this);
-        presenter.ponInfoLibro(id);
+        presenter.ponInfoLibro(key);
         mediaController = new MediaController(getActivity());
         //Poner aquí los cambios en ZoomSeekBar
         zoombar = (ZoomSeekBar) vista.findViewById(R.id.zoombar);
@@ -61,8 +63,8 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
         return vista;
     }
 
-    public void ponInfoLibro(int id) {
-        presenter.ponInfoLibro(id);
+    public void ponInfoLibro(String key) {
+        presenter.ponInfoLibro(key);
     }
 
     @Override
