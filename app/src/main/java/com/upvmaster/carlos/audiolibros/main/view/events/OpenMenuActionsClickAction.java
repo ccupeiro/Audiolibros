@@ -79,8 +79,8 @@ public class OpenMenuActionsClickAction implements ClickAction{
                     case 2: //Insertar
                         LibrosSingleton.getInstance(view.getContext()).getAdaptadorLibros().insertar(
                                 LibrosSingleton.getInstance(view.getContext()).getAdaptadorLibros().getItemByKey(key));
-                        //adaptador.notifyDataSetChanged();
-                        LibrosSingleton.getInstance(view.getContext()).getAdaptadorLibros().notifyItemInserted(0);
+                        LibrosSingleton.getInstance(view.getContext()).getAdaptadorLibros().notifyDataSetChanged();
+                        //LibrosSingleton.getInstance(view.getContext()).getAdaptadorLibros().notifyItemInserted(0);
                         Snackbar.make(view, "Libro insertado", Snackbar.LENGTH_INDEFINITE).setAction("OK", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
