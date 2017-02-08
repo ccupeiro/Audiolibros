@@ -36,7 +36,6 @@ import static android.R.attr.id;
 
 public class DetalleFragment extends Fragment implements View.OnTouchListener, MediaPlayer.OnPreparedListener, MediaController.MediaPlayerControl,DetallePresenter.View {
     public static String ARG_ID_LIBRO = "id_libro";
-    private MediaController mediaController;
     private View vista;
     private DetallePresenter presenter;
     private ZoomSeekBar zoombar;
@@ -50,9 +49,8 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
         if (args != null) {
             key = args.getString(ARG_ID_LIBRO);
         }
-        presenter = new DetallePresenter(vista.getContext(), this);
+        presenter = new DetallePresenter(vista.getContext(),new MediaController(getActivity()), this);
         presenter.ponInfoLibro(key);
-        mediaController = new MediaController(getActivity());
         //Poner aquí los cambios en ZoomSeekBar
         zoombar = (ZoomSeekBar) vista.findViewById(R.id.zoombar);
         zoombar.setVisibility(View.INVISIBLE);
@@ -69,27 +67,7 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
 
     @Override
     public void onPrepared(MediaPlayer mediaPlayer) {
-        Log.d("Audiolibros", "Entramos en onPrepared de MediaPlayer");
-        SharedPreferences preferencias = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        if (preferencias.getBoolean("pref_autoreproducir", true)) {
-            mediaPlayer.start();
-        }
-        mediaController.setMediaPlayer(this);
-        mediaController.setAnchorView(getView().findViewById(
-                R.id.fragment_detalle));
-        mediaController.setPadding(0, 0, 0, 110);
-        mediaController.setEnabled(true);
-        mediaController.show();
-        //Poner el Zoombar
-        int duracionAudio = mediaPlayer.getDuration() / 1000;
-        zoombar.setValMin(0);
-        zoombar.setEscalaMin(0);
-        zoombar.setEscalaIni(0);
-        zoombar.setEscalaRaya(duracionAudio/50);
-        zoombar.setEscalaRayaLarga(10);
-        zoombar.setValMax(duracionAudio);
-        zoombar.setEscalaMax(duracionAudio);
-        zoombar.setVisibility(View.VISIBLE);
+        presenter.onPrepareMediaPlayer(getActivity(),getView().findViewById(R.id.fragment_detalle),this,zoombar);
     }
 
     @Override
@@ -103,13 +81,12 @@ public class DetalleFragment extends Fragment implements View.OnTouchListener, M
 
     @Override
     public boolean onTouch(View vista, MotionEvent evento) {
-        mediaController.show();
+        presenter.showMediaController();
         return false;
     }
 
     @Override
     public void onStop() {
-        mediaController.hide();
         presenter.onStop();
         super.onStop();
     }

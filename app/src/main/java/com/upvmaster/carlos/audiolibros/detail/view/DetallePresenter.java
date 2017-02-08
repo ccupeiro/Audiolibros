@@ -1,12 +1,16 @@
 package com.upvmaster.carlos.audiolibros.detail.view;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
 import android.widget.MediaController;
 
+import com.upvmaster.carlos.audiolibros.R;
 import com.upvmaster.carlos.audiolibros.main.data.BooksRepository;
 import com.upvmaster.carlos.audiolibros.main.data.datasources.Libro;
 import com.upvmaster.carlos.audiolibros.main.data.datasources.LibroStorage;
@@ -23,15 +27,16 @@ import static android.R.attr.id;
 public class DetallePresenter {
     private Libro book;
     private MediaPlayer mediaPlayer;
-    private MediaPlayer.OnPreparedListener onPreparedListener;
+    private MediaController mediaController;
     private Handler mHandler;
     private Runnable run_tiempo;
     private Context context;
     private View view;
 
-    public DetallePresenter(Context context, View view) {
+    public DetallePresenter(Context context,MediaController mediaController, View view) {
         this.context = context;
         this.mediaPlayer = new MediaPlayer();
+        this.mediaController = mediaController;
         this.mHandler = new Handler();
         this.view = view;
     }
@@ -51,7 +56,31 @@ public class DetallePresenter {
         view.ponInfoLibro(book);
     }
 
+    public void onPrepareMediaPlayer(Context context, android.view.View anchovista, MediaController.MediaPlayerControl controller, ZoomSeekBar zoombar){
+        Log.d("Audiolibros", "Entramos en onPrepared de MediaPlayer");
+        SharedPreferences preferencias = PreferenceManager.getDefaultSharedPreferences(context);
+        if (preferencias.getBoolean("pref_autoreproducir", true)) {
+            mediaPlayer.start();
+        }
+        mediaController.setMediaPlayer(controller);
+        mediaController.setAnchorView(anchovista);
+        mediaController.setPadding(0, 0, 0, 110);
+        mediaController.setEnabled(true);
+        mediaController.show();
+        //Poner el Zoombar
+        int duracionAudio = mediaPlayer.getDuration() / 1000;
+        zoombar.setValMin(0);
+        zoombar.setEscalaMin(0);
+        zoombar.setEscalaIni(0);
+        zoombar.setEscalaRaya(duracionAudio/50);
+        zoombar.setEscalaRayaLarga(10);
+        zoombar.setValMax(duracionAudio);
+        zoombar.setEscalaMax(duracionAudio);
+        zoombar.setVisibility(android.view.View.VISIBLE);
+    }
+
     public void onStop(){
+        hideMediaController();
         mHandler.removeCallbacks(run_tiempo);
         try {
             mediaPlayer.stop();
@@ -110,6 +139,12 @@ public class DetallePresenter {
     }
     public int getCurrentPosition(){
         return mediaPlayer.getCurrentPosition();
+    }
+    public void showMediaController(){
+        mediaController.show();
+    }
+    public void hideMediaController(){
+        mediaController.hide();
     }
 
 

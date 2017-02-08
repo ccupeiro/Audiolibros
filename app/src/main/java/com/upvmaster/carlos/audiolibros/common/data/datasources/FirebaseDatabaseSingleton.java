@@ -22,7 +22,7 @@ public class FirebaseDatabaseSingleton {
     }
 
     private FirebaseDatabaseSingleton() {
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        database = FirebaseDatabase.getInstance();
         database.setPersistenceEnabled(true);
         booksReference = database.getReference().child(BOOKS_CHILD);
         usersReference = database.getReference().child(USERS_CHILD);
