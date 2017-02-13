@@ -68,7 +68,7 @@ public class AdaptadorLibrosFiltro extends AdaptadorLibros implements Observer {
         }
         return super.getItem(indiceFiltro.get(posicion));
     }
-    @Override
+
     public int getItemCount() {
         if (librosUltimoFiltro != super.getItemCount()) {
             recalculaFiltro();
@@ -76,10 +76,7 @@ public class AdaptadorLibrosFiltro extends AdaptadorLibros implements Observer {
         return indiceFiltro.size();
     }
     public long getItemId(int posicion) {
-        if (librosUltimoFiltro != super.getItemCount()) {
-            recalculaFiltro();
-        }
-        return indiceFiltro.size();
+        return indiceFiltro.get(posicion);
     }
 
     public Libro getItemById(int id) {
